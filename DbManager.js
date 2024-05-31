@@ -1,4 +1,3 @@
-import { Cookie } from "express-session";
 import sql  from "mssql/msnodesqlv8.js";
 
 const dbConfig = {
