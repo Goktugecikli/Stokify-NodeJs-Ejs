@@ -6,7 +6,7 @@ class UserService {
     }
 
     async validateUser(username, password) {
-        console.log("[DEBUG] User Service Çalıştı")
+        console.log("[DEBUG] User Service Çalıştı");
         const query = "SELECT COUNT(*) as count FROM Users WHERE username = @username AND password = @password";
         const params = { username, password };
         const result = await this.db.queryWithResult(query, params);
