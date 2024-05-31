@@ -11,30 +11,7 @@ import { connect } from 'http2';
 
 import UserService from './UserService.js';
 
-const dbConfig = {
-    server: 'DESKTOP-NDQN894',
-    database: 'StockTracking',
-    user: 'sa',
-    password: '12345678',
-    port: 1433,
-    options: {
-        // encrypt: true,
-        // trustServerCertificate: true,
-        trustedConnection: true,
-        // enableArithAbort: true,
-        // integratedSecurity: true,
-        // Güvenilir bağlantı için yorum satırından çıkarılabilir
-        // authentication: {
-        //     type: 'default',
-        //     options: {
-        //         userName: 'DESKTOP-NDQN894\\ggeci', // Windows kullanıcı adı ve alanı
-        //         // password: 'password' // Gerekirse şifre de buraya eklenebilir
-        //     }
-        // }
-    }
-};
-
-const db = new DatabaseManager(dbConfig);
+const db = new DatabaseManager();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
