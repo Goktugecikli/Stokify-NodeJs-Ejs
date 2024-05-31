@@ -1,14 +1,9 @@
-import constants from 'constants';
-import express from 'express';
 import path from 'path';
+import express from 'express';
 import session from 'express-session';
 import bodyParser from 'body-parser';
 import { fileURLToPath } from 'url';
 import DatabaseManager from './DbManager.js';
-import { cwd } from 'process';
-import { log } from 'console';
-import { connect } from 'http2';
-
 import UserService from './UserService.js';
 
 const db = new DatabaseManager();
