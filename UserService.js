@@ -1,20 +1,20 @@
-import DatabaseManager from './DbManager.js';
+import UserRepository from "./UserRepository.js";
 
+ 
 class UserService {
-    constructor(dbConfig) {
-        this.db = new DatabaseManager(dbConfig);
+    constructor() {
+        this.userRepository = new UserRepository();
     }
 
-    async validateUser(username, password) {
-        console.log("[DEBUG] User Service Çalıştı")
-        const query = "SELECT COUNT(*) as count FROM Users WHERE username = @username AND password = @password";
-        const params = { username, password };
-        const result = await this.db.queryWithResult(query, params);
-        console.log("[DEBUG] User Service Bitti")
-
-        return result[0].count;
+     async validateUser(username, password) {
+        try {
+            var result = await this.userRepository.GetUserByNameAndPassword(username, password);
+            return result;
+        } catch (err) {
+            console.error('Error validating user', err);
+        } 
     }
-
+ 
     // Diğer metodları buraya ekleyin...
 }
 
