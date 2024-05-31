@@ -1,15 +1,38 @@
-import sql from "mssql/msnodesqlv8.js";
+import { Cookie } from "express-session";
+import sql  from "mssql/msnodesqlv8.js";
 
-class Database {
-    constructor(dbConfig) {
-        this.dbConfig = dbConfig;
-        this.pool = new sql.ConnectionPool(dbConfig);
-        this.pool.connect();
+const dbConfig = {
+    server: 'DESKTOP-NDQN894',
+    database: 'StockTracking',
+    user: 'sa',
+    password: '12345678',
+    port: 1433,
+    driver:"msnodesqlv8",
+    options: {
+        // encrypt: true,
+        // trustServerCertificate: true,
+        trustedConnection: true,
+        // enableArithAbort: true,
+        // integratedSecurity: true,
+        // Güvenilir bağlantı için yorum satırından çıkarılabilir
+        // authentication: {
+        //     type: 'default',
+        //     options: {
+        //         userName: 'DESKTOP-NDQN894\\ggeci', // Windows kullanıcı adı ve alanı
+        //         // password: 'password' // Gerekirse şifre de buraya eklenebilir
+        //     }
+        // }
+    }
+};
+
+class DatabaseManager {
+    constructor() {
+    
     }
 
     async connectDB() {
         try {
-            this.pool = await sql.connect(this.dbConfig);
+            this.pool = await sql.connect(dbConfig);
             console.log('Connected to database');
             return this.pool;
         } catch (err) {
@@ -19,8 +42,8 @@ class Database {
 
     async queryWithResult(query, params = null) {
         console.log("[DEBUG] Db içinde");
-        try {
-            let request = this.pool.request();
+        try {        
+             let request = this.pool.request();
             // Parametreleri eklemek için input metodu kullanılıyor
             if(params!=null)
             {
@@ -71,4 +94,4 @@ class Database {
     }
 }
 
-export default Database;
+export default DatabaseManager;

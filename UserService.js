@@ -5,16 +5,20 @@ class UserService {
         this.db = new DatabaseManager(dbConfig);
     }
 
-    async validateUser(username, password) {
-        console.log("[DEBUG] User Service Çalıştı");
-        const query = "SELECT COUNT(*) as count FROM Users WHERE username = @username AND password = @password";
-        const params = { username, password };
-        const result = await this.db.queryWithResult(query, params);
-        console.log("[DEBUG] User Service Bitti")
-
-        return result[0].count;
+     async validateUser(username, password) {
+        try {
+            await this.db.connectDB(); // Veritabanına bağlan
+            let params = {username: username, password: password};
+            let query = "SELECT COUNT(*) AS count FROM Users WHERE username = @username AND password = @password";
+            let result = await this.db.queryWithResult(query, params);
+            return result[0].count;
+        } catch (err) {
+            console.error('Error validating user', err);
+        } finally {
+            await this.db.closeDB(); // Veritabanı bağlantısını kapat
+        }
     }
-
+ 
     // Diğer metodları buraya ekleyin...
 }
 
