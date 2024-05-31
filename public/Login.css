@@ -1,0 +1,275 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.main{
+    height: 100vh;
+    width: 100%;
+    /* background:linear-gradient(to bottom left,#ccfafc,#074ef2,#18035e,#be3af2,#a16ceb); */
+    background:linear-gradient(to right,#ffff,#25af81);
+    background-size: 300% 300%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+.glass{
+    width: 100%;
+    max-width: 1200px;
+    height: 500px;
+    display: flex;
+    z-index: 0;
+    background-color:aliceblue;
+    border-radius: 20px ;
+    box-shadow: 0 8px 32px 0 rgba(0,0,0,0.37);
+    border: 1px solid rgba(255,255,255,0.18);
+    
+}
+
+.glass2{
+    width: 100%;
+    max-width: 1200px;
+    height: 500px;
+    z-index: 0;
+    display: none;
+    background-color:#2cb889;
+    border-radius: 20px ;
+    box-shadow: 0 8px 32px 0 rgba(0,0,0,0.37);
+    border: 1px solid rgba(255,255,255,0.18);
+}
+
+.username{
+    border: 1px solid #2cb889;
+    border-radius: 0.5rem;
+    text-align: center;
+    width: 70%;
+    max-width: 600px;
+    height: 8%;
+    text-decoration: none;
+}
+
+.password{
+    text-align: center;
+    border-radius: 0.5rem;
+    border: 1px solid #2cb889;
+    width: 70%;
+    max-width: 600px;
+    height: 8%;
+}
+.password::placeholder{
+    font-size: large;
+}
+.username::placeholder{
+    font-size: large;
+}
+
+.company_name::placeholder{
+    font-size: large;
+}
+
+.login{
+    width: 50%;
+    max-width: 600px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    gap:5%;
+
+}
+
+.login_button{
+    width: 50%;
+    max-width: 600px;
+    height: 3rem;
+    border-radius: 1.5rem;
+    background-color: #2cb889;
+    border:none;
+    color: white;
+    font-size: x-large;
+}
+
+.login_button:hover{
+    transform: scale(1.1);
+}
+
+.login_text{
+    color: #2cb889;
+    font-size: 50px;
+    text-decoration: underline 3px ;
+    text-underline-offset: 10px;
+    font-weight: bolder;
+    font-family:Georgia, 'Times New Roman', Times, serif;
+}
+
+.signup{
+    width: 50%;
+    max-width: 600px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    background-color: #2cb889;
+    gap: 5%;
+    border-radius: 150px 20px 20px 150px ;
+}
+
+
+.signup_text{
+    width: 50%;
+    max-width: 600px;
+    color: aliceblue;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.join_us{
+    color: aliceblue;
+    font-family:cursive;
+    font-size:medium ;
+    margin: 5% 9% 5% 9% ;
+    text-align: center;
+}
+
+.signup_button{
+    width: 50%;
+    max-width: 600px;
+    height: 3rem;
+    border: 1px solid aliceblue;
+    border-radius:1.5rem;
+    background-color:#2cb889 ;
+    text-align: center;
+    color: aliceblue;
+    font-size: x-large;
+}
+
+.signup_button:hover{
+    transform: scale(1.1);
+}
+
+.social{
+    align-items: center;
+    justify-content: center;
+}
+
+.social i {
+    gap:0.20px;
+    font-size: xx-large;
+    color: #2cb889;
+}
+
+.project_name{
+    position: absolute;
+    top: 30%;
+    height: fit-content;
+    font-size: 75px;
+    font-weight: bolder;
+    background-image: linear-gradient(to right ,#79ebc5,#2cb889,#18684d);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    transition: top 0.7s ease-in-out;
+    z-index: -1;
+}
+
+
+#main:hover #project_name {
+    top: 0;
+}
+
+
+.signup_page_text{
+    color: aliceblue;
+    font-size: 50px;
+    text-decoration: underline 3px ;
+    text-underline-offset: 10px;
+    font-weight: bolder;
+    font-family:Georgia, 'Times New Roman', Times, serif;
+}
+
+.signup_page{
+    width: 50%;
+    max-width: 600px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    gap:5%;
+}
+
+.to_signup_button{
+    width: 50%;
+    max-width: 600px;
+    height: 3rem;
+    border: 1px solid aliceblue;
+    border-radius:1.5rem;
+    background-color:#2cb889 ;
+    text-align: center;
+    color: aliceblue;
+    font-size: x-large;
+}
+.to_signup_button:hover{
+    transform: scale(1.1);
+}
+
+.signin_text{
+    width: 50%;
+    max-width: 600px;
+    color: #2cb889;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.signin_button{
+    width: 50%;
+    max-width: 600px;
+    height: 3rem;
+    border: 1px solid aliceblue;
+    border-radius:1.5rem;
+    background-color:#2cb889 ;
+    text-align: center;
+    color: aliceblue;
+    font-size: x-large;
+}
+
+.company_name{
+    border: 1px solid #2cb889;
+    border-radius: 0.5rem;
+    text-align: center;
+    width: 70%;
+    max-width: 600px;
+    height: 8%;
+    text-decoration: none;
+}
+
+.signin{
+    width: 50%;
+    max-width: 600px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    background-color: aliceblue;
+    gap: 5%;
+    border-radius: 150px 20px 20px 150px ;
+}
+
+.signin_button:hover{
+    transform: scale(1.1);
+
+}
+
+@media screen and (max-width:768px){
+    .glass{
+        width: 90%;
+    }
+    .glass2{
+        width: 90%;
+    }
+}

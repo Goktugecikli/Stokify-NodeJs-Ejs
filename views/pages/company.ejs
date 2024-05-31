@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/MainPage.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href='https://cdn.jsdelivr.net/npm/boxicons@2.0.5/css/boxicons.min.css' rel='stylesheet'>
+    <title>Sidebar menu</title>
+</head>
+<body id="body">
+    <div class="l-navbar" id="navbar">
+        <nav class="nav">
+            <div>
+                <a href="#" class="nav__logo">
+                    <img src="/assets/icons/logo.svg" alt="" class="nav__logo-icon">
+                    <span class="nav__logo-text"><box-icon type='solid' name='user-detail'></box-icon></span>
+                </a>
+
+                <div class="nav__toggle" id="nav-toggle">
+                    <i class='bx bx-chevron-right'></i>
+                </div>
+
+                <ul class="nav__list">
+                    <a href="/home" class="nav__link active">
+                        <i class='bx bx-grid-alt nav__icon'></i>
+                        <span class="nav__text">Home</span>
+                    </a>
+                    <a href="/company" class="nav__link">
+                        <i class='bx bx-user nav__icon' ></i>
+                        <span class="nav__text">Company</span>
+                    </a>
+                    <a href="/notification" class="nav__link">
+                        <i class='bx bx-bell nav__icon' ></i>
+                        <span class="nav__text">Notification</span>
+                    </a>
+                    <a href="/reports" class="nav__link">
+                        <i class="fa-regular fa-folder nav__icon"></i>
+                        <span class="nav__text">Reports</span>
+                    </a>
+                    <a href="/stock" class="nav__link">
+                        <i class="fa-solid fa-boxes-stacked nav__icon"></i>
+                        <span class="nav__text">Stock</span>
+                    </a>
+                    <a href="/approvals" class="nav__link">
+                        <i class="fa-regular fa-circle-check nav__icon"></i>
+                        <span class="nav__text">Approvals</span>
+                    </a>                 
+                </ul>
+            </div>
+            <a href="#" class="nav__link">           
+                <i class='bx bx-log-out-circle nav__icon'></i>
+                <span class="nav__text">Log Out</span>
+            </a>
+        </nav>
+    </div>
+    <div class="company__info">
+        <div class="company__title">
+            <div class="company__pic">
+                <img src="/company_pp.jpg" class="company__pp" alt="">
+            </div>
+            <div class="company__name">
+                <p>Enva Medikal Sağlık Hizm. Tic. ve Ltd. Şti.</p>
+            </div>
+        </div>
+    </div>
+    <div class="company__details">
+        <div>
+            <h2 class="company_details_label">Owner Name:</h2>
+            <span class="company_details_value">goktug</span>
+        </div>
+        <div>
+            <h2 class="company_details_label">Owner Surname:</h2>
+            <span class="company_details_value">geçikli </span>
+        </div>
+        <div>
+            <h2 class="company_details_label">Adress:</h2>
+            <p class="company_details_value">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Temporibus iure, numquam, qui est quibusdam aperiam maiores eligendi quidem cupiditate blanditiis ipsa facere fugit corporis reiciendis? Delectus modi quas, impedit sit voluptate deleniti dolorum ratione error saepe qui non! Deleniti tempora, ullam eligendi eius voluptas maxime nihil, consequuntur enim eveniet porro, accusantium doloribus facilis quis. Iste eveniet quas id minus voluptatem, mollitia velit et ducimus ipsam aliquid omnis incidunt sed praesentium dolores libero accusantium harum. Animi earum, voluptas, quos, fugiat consequatur sint doloremque architecto esse modi officia aliquid quae amet nihil unde quibusdam. Sunt eos earum quibusdam, at molestiae consequatur corporis?</p>
+        </div>
+    </div>
+    <div>
+        <div class=""></div>
+        <div></div>
+        <div></div>
+    </div>
+    <!-- MAIN JS -->
+    <script src="/MainScript.js"></script>
+</body>
+</html>
