@@ -33,7 +33,7 @@ class DatabaseManager {
     async connectDB() {
         try {
             this.pool = await sql.connect(dbConfig);
-            console.log('Connected to database');
+            // console.log('Connected to database');
             return this.pool;
         } catch (err) {
             console.error('Database connection failed', err);
@@ -41,7 +41,7 @@ class DatabaseManager {
     }
 
     async queryWithResult(query, params = null) {
-        console.log("[DEBUG] Db içinde");
+        // console.log("[DEBUG] Db içinde");
         try {        
              let request = this.pool.request();
             // Parametreleri eklemek için input metodu kullanılıyor
@@ -54,12 +54,11 @@ class DatabaseManager {
                 }
             }
             let result = await request.query(query);
-            console.log("[DEBUG] Db bitti");
+            // console.log("[DEBUG] Db bitti");
 
             return result.recordset;
         } catch (err) {
-            console.log("[DEBUG] Db hata");
-
+            // console.log("[DEBUG] Db hata");
             console.error('Query failed', err);
         }
 
@@ -87,7 +86,7 @@ class DatabaseManager {
     async closeDB() {
         try {
             await sql.close();
-            console.log('Connection closed');
+            // console.log('Connection closed');
         } catch (err) {
             console.error('Failed to close connection', err);
         }

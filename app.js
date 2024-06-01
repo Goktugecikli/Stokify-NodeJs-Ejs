@@ -5,8 +5,10 @@ import bodyParser from 'body-parser';
 import { fileURLToPath } from 'url';
 import DatabaseManager from './DbManager.js';
 import UserService from './UserService.js';
+import FileStoreFactory from 'session-file-store';
 
 const db = new DatabaseManager();
+const FileStore = FileStoreFactory(session);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -15,39 +17,89 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use(session({
-    secret: 'yourSecretKey',
-    resave: false,
-    saveUninitialized: true
-}));
+    app.use(session({
+        store: new FileStore({ path: './sessions' }),
+        cookie :{
+            maxAge:1000 * 60 ,
+            httpOnly:true,
+        },
+        secret: 'mysecretkey',
+        resave: false,
+        saveUninitialized: false,
+        
+    }));
 
-// EJS'yi şablon motoru olarak ayarlayın
+    // -----------------------------------
+
+    function checkAuth(req, res, next) {
+        if (req.session.user) {
+            console.log(req.session.user)
+            return res.redirect('/home');
+        }
+        next();
+    }
+
+    function requireAuth(req, res, next) {
+        if (!req.session.user) {
+            return res.redirect('/login');
+        }
+        next();
+    }
+    
+
+    app.get('/login', checkAuth, (req, res) => {
+        console.log(req.session.user)
+        res.render('login');  // Ensure you have a login.ejs view
+    });
+
+    app.get('/', checkAuth, (req, res) => {
+        console.log(req.session.user)
+        res.render('login');  // Ensure you have a login.ejs view
+    });
+
+
+
+    app.get('/logout', (req, res) => {
+        req.session.destroy((err) => {
+            if (err) {
+                return res.status(500).send('Could not log out.');
+            } else {
+                res.clearCookie('connect.sid');  // Clear the session cookie
+                return res.redirect('/');
+            }
+        });
+    });
+
+
+//------------------------------------------
+
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 // Statik dosyalar için klasörü ayarlayın
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Ana sayfa rotası
-app.get('/', (req, res) => {
-    res.render('index');
-});
 
 // Diğer sayfalar için rotalar
-app.get('/home', (req, res) => res.render('pages/home'));
-app.get('/company', (req, res) => res.render('pages/company'));
-app.get('/notification', (req, res) => res.render('pages/notification'));
-app.get('/reports', (req, res) => res.render('pages/reports'));
-app.get('/stock', (req, res) => res.render('pages/stock'));
-app.get('/approvals', (req, res) => res.render('pages/approvals'));
-app.get('/logout', (req, res) => { res.redirect('/'); });
+app.get('/home', requireAuth,(req, res) => res.render('pages/home'));
+app.get('/company',requireAuth, (req, res) => res.render('pages/company'));
+app.get('/notification', requireAuth,(req, res) => res.render('pages/notification'));
+app.get('/reports',requireAuth, (req, res) => res.render('pages/reports'));
+app.get('/stock',requireAuth, (req, res) => res.render('pages/stock'));
+app.get('/approvals',requireAuth, (req, res) => res.render('pages/approvals'));
+// app.get('/logout', (req, res) => { 
+//     req.session.destroy();
+//     res.redirect('/login');
+// });
 app.post('/auth', async (req, res) => {
     const { username, password } = req.body;
+    // console.log(req.session.user)
     // console.log(username + " "  + password);
     var userService = new UserService();
     const isValidUser = await userService.validateUser(username, password);
     if (isValidUser > 0) {
         req.session.user = username;
+        req.session.authorized = true;
         res.json({ success: true, redirectUrl: '/home' });
     } else {
         res.json({ success: false, message: 'Bilgiler yanlış' });
@@ -63,3 +115,32 @@ app.listen(PORT, () => {
 
 
 
+// app.use((req, res, next) => {
+//     // Oturum kontrolü yapmadan önce /login sayfasından gelen istekleri kontrol et
+//     if (req.path === '/login') {
+//       return next();
+//     }
+  
+//     // Oturum kontrolü yap
+//     if (req.session.isLoggedIn) {
+//       return next(); // Kullanıcı giriş yapmış, bir sonraki middleware'e geç
+//     }
+//     res.redirect('/login'); // Kullanıcı giriş yapmamış, login sayfasına yönlendir
+//   });
+  
+  
+// app.use((req, res, next) => {
+//     if (!req.session.redirected) {
+//         console.log(req.session.user)
+//         // Kullanıcı oturumu açmış
+//         console.log(`Geldi. "${req.session.user}"`)
+//         next();
+//     } else {
+//         // Kullanıcı oturumu açmamış, login sayfasına yönlendir
+//         console.log(`2. "${req.session.user}"`)
+//         req.session.redirected = true; // Yönlendirildiğini işaretle
+//         res.redirect('/');
+
+//     }
+// });
+// EJS'yi şablon motoru olarak ayarlayın
