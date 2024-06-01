@@ -250,16 +250,17 @@ a {
 .company__details {
   box-shadow: 4px 4px 10px 5px rgba(0, 0, 0, 0.316);
   padding: 10px;
-  border-radius: 0px;
+  border-radius: 20px;
   margin-right: 1.5rem;
   margin-top: 1rem;
+  background-color: #ffff ;
 }
 
 .company_details_label {
   padding: 5px;
   border-left: 6px solid #4e9c83;
   border-radius: 5px;
-  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.316);
+  /* box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.316); */
 
 }
 

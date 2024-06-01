@@ -6,9 +6,12 @@ import { fileURLToPath } from 'url';
 import DatabaseManager from './DbManager.js';
 import UserService from './UserService.js';
 import FileStoreFactory from 'session-file-store';
+import UserRepository from './UserRepository.js';
 
 const db = new DatabaseManager();
+
 const FileStore = FileStoreFactory(session);
+const userRepository = new UserRepository();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -20,7 +23,7 @@ app.use(bodyParser.json());
     app.use(session({
         store: new FileStore({ path: './sessions' }),
         cookie :{
-            maxAge:1000 * 60 ,
+            maxAge:1000*60*60*24,
             httpOnly:true,
         },
         secret: 'mysecretkey',
@@ -33,7 +36,7 @@ app.use(bodyParser.json());
 
     function checkAuth(req, res, next) {
         if (req.session.user) {
-            console.log(req.session.user)
+          //  console.log(req.session.user)
             return res.redirect('/home');
         }
         next();
@@ -48,18 +51,17 @@ app.use(bodyParser.json());
     
 
     app.get('/login', checkAuth, (req, res) => {
-        console.log(req.session.user)
         res.render('login');  // Ensure you have a login.ejs view
     });
 
     app.get('/', checkAuth, (req, res) => {
-        console.log(req.session.user)
         res.render('login');  // Ensure you have a login.ejs view
     });
 
 
 
     app.get('/logout', (req, res) => {
+        //console.log(req.session.user);
         req.session.destroy((err) => {
             if (err) {
                 return res.status(500).send('Could not log out.');
@@ -81,8 +83,39 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 // Diğer sayfalar için rotalar
-app.get('/home', requireAuth,(req, res) => res.render('pages/home'));
-app.get('/company',requireAuth, (req, res) => res.render('pages/company'));
+app.get('/home', requireAuth, async(req, res) =>{ 
+    try {
+        
+        const username = req.session.user;
+        console.log(req.session.user);
+        const user = await userRepository.getUserById(username);
+       
+        if (!user) {
+            return res.status(404).send('User not found');
+        }
+        res.render('pages/home', { user:user[0]});
+    } catch (err) {
+        console.error('Error fetching user data:', err);
+        res.status(500).send('Error fetching user data');
+    }
+    // res.render('pages/home')
+});
+
+app.get('/company',requireAuth,async (req, res) => {
+    try {
+        
+        const username = req.session.user;
+        console.log(req.session.user);
+        const user = await userRepository.getUserById(username);
+    
+        if (!user) {
+            return res.status(404).send('User not found');
+        }
+        res.render('pages/company', { user:user[0]});
+    } catch (err) {
+        console.error('Error fetching user data:', err);
+        res.status(500).send('Error fetching user data');
+    }});
 app.get('/notification', requireAuth,(req, res) => res.render('pages/notification'));
 app.get('/reports',requireAuth, (req, res) => res.render('pages/reports'));
 app.get('/stock',requireAuth, (req, res) => res.render('pages/stock'));
