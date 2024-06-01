@@ -16,11 +16,16 @@ box.addEventListener('mouseenter', () => {
 // });
 
 var x = document.getElementById("to_signup_button");
-var y = document.getElementById("signin");
+
 var a = document.getElementById("box");
 var b = document.getElementById("box2");
-var loginButton = document.getElementById('login');
+var signupButtom = document.getElementById('tosignup');
 
+
+function SignIn(){
+    b.style.display ="none";
+    a.style.display= "flex";
+}
 
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -48,16 +53,28 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
- 
-function ToSignUp(){
-    a.style.display= "none";
-    b.style.display ="flex";
-}
+document.addEventListener('DOMContentLoaded', function() {
+    var signupButton = document.getElementById('tosignup');
+    signupButton.addEventListener('click',  function ToSignUp() {
+     
+        a.style.display= "none";
+        b.style.display ="flex";
+      
+    });
+});
 
-function SignIn(){
-    b.style.display ="none";
-    a.style.display= "flex";
-}
+document.addEventListener('DOMContentLoaded', function() {
+    var signin = document.getElementById('signin');
+    signin.addEventListener('click',  function SignIn() {
+     
+        b.style.display ="none";
+        a.style.display= "flex";
+      
+    });
+});
+
+
+
 
 // function getAlert(msg, color) {
 //     Toastify({

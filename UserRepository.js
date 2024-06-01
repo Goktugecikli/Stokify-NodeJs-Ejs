@@ -18,8 +18,26 @@ class UserRepository {
             await this.db.closeDB(); // Veritabanı bağlantısını kapat
         }
     }
- 
-    // Diğer metodları buraya ekleyin...
+    
+    async getUserById(username) {
+        try {
+            await this.db.connectDB();
+            let params = { username: username };
+            let query = "SELECT * FROM Users WHERE Username = @username";
+            let result = await this.db.queryWithResult(query, params);
+            // console.log(result);
+            // console.log(result[0].Password);
+            // console.log(result[0].Email);
+            // console.log(result[0].UserId);
+            return result; // Tek bir kullanıcı döneceği varsayımıyla
+        } catch (err) {
+            console.error('Error repository connection. Err', err);
+        } finally {
+            await this.db.closeDB();
+        }
+    }
+
+
 }
 
 export default UserRepository;
