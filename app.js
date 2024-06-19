@@ -116,7 +116,7 @@ app.get('/company',requireAuth,async (req, res) => {
         console.error('Error fetching user data:', err);
         res.status(500).send('Error fetching user data');
     }});
-app.get('/notification', requireAuth,(req, res) => res.render('pages/notification'));
+app.get('/stock-operations', requireAuth,(req, res) => res.render('pages/stock-operations'));
 app.get('/reports',requireAuth, (req, res) => res.render('pages/reports'));
 app.get('/stock',requireAuth, (req, res) => res.render('pages/stock'));
 app.get('/approvals',requireAuth, (req, res) => res.render('pages/approvals'));
@@ -139,6 +139,26 @@ app.post('/auth', async (req, res) => {
     }
 });
 
+
+app.post('/register', async(req,res) => {
+    // console.log(JSON.stringify(req.body));
+    const {firstName,lastName,email,username,password}  =req.body;
+    var userService = new UserService();
+
+    const isExistUser = await userService.IsExistUser(username);
+    // console.log(isExistUser);
+    if(isExistUser != null && isExistUser.length > 0){
+        res.json({ success: false, message: 'kullanıcı zaten kayıtlı' });
+        return;
+    }
+    var result  = userService.Register(firstName,lastName,email,username,password);
+    if(result === false){
+        res.json({ success: false, message: 'kayıt yapılırken hata meydana geldi sonra tekrar deneyiniz' });
+        return;
+    }
+    res.json({ success: true ,redirectUrl: '/login'});
+
+  })
 // Sunucuyu başlatın
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
@@ -146,34 +166,3 @@ app.listen(PORT, () => {
 });
 // Veritabanı bağlantısı oluştur
 
-
-
-// app.use((req, res, next) => {
-//     // Oturum kontrolü yapmadan önce /login sayfasından gelen istekleri kontrol et
-//     if (req.path === '/login') {
-//       return next();
-//     }
-  
-//     // Oturum kontrolü yap
-//     if (req.session.isLoggedIn) {
-//       return next(); // Kullanıcı giriş yapmış, bir sonraki middleware'e geç
-//     }
-//     res.redirect('/login'); // Kullanıcı giriş yapmamış, login sayfasına yönlendir
-//   });
-  
-  
-// app.use((req, res, next) => {
-//     if (!req.session.redirected) {
-//         console.log(req.session.user)
-//         // Kullanıcı oturumu açmış
-//         console.log(`Geldi. "${req.session.user}"`)
-//         next();
-//     } else {
-//         // Kullanıcı oturumu açmamış, login sayfasına yönlendir
-//         console.log(`2. "${req.session.user}"`)
-//         req.session.redirected = true; // Yönlendirildiğini işaretle
-//         res.redirect('/');
-
-//     }
-// });
-// EJS'yi şablon motoru olarak ayarlayın

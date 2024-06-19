@@ -1,0 +1,31 @@
+<div class="container">
+    <h2>Ürün Bilgi Giriş Formu</h2>
+    <form id="productForm">
+        <div class="form-group">
+            <label for="islemTuru">İşlem Türü</label>
+            <select id="islemTuru" name="islemTuru" onchange="handleIslemTuruChange()">
+                <option value="">Seçiniz</option>
+                <option value="1">İşlem Türü 1</option>
+                <option value="2">İşlem Türü 2</option>
+                <option value="3">İşlem Türü 3</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="urunAdi">Ürün Adı</label>
+            <input type="text" id="urunAdi" name="urunAdi" disabled>
+        </div>
+        <div class="form-group">
+            <label for="marka">Marka</label>
+            <input type="text" id="marka" name="marka" disabled>
+        </div>
+        <div class="form-group">
+            <label for="barkodNo">Barkod No</label>
+            <input type="text" id="barkodNo" name="barkodNo" disabled>
+        </div>
+        <div class="form-group" id="adetSayisiGroup">
+            <label for="adetSayisi">Adet Sayısı</label>
+            <input type="number" id="adetSayisi" name="adetSayisi" disabled>
+        </div>
+        <button type="submit">Kaydet</button>
+    </form>
+</div>

@@ -32,7 +32,7 @@
                 <h1 class="signup_text">Hello Friend,</h1>
                 <p class="join_us">Are you struggling to keep track of your stocks? Join us, where even the most financially challenged find 
                     solace in our chaotic market adventures!</p>
-                <input type="button" class="signup_button" id="tosignup"  onclick="ToSignUp()" value="Join Us"> 
+                <input type="button" class="signup_button" id="tosignup" value="Join Us"> 
             </div>
         </div>
 
@@ -40,15 +40,17 @@
         <div class=" glass2" id="box2">
             <div class="signup_page">
                 <p class="signup_page_text">Sign In</p>
-                <input type="text" name="company_name" placeholder="Company Name" id="" class="company_name">
-                <input type="text" name="username" placeholder="Username" id="" class="username">
-                <input type="text" name="password" placeholder="Password" id="" class="password">
-                <input type="text" name="password" placeholder="Password Again" id="" class="password">
-                <input type="button" class="to_signup_button"  value="Sign Up"> 
+                <input type="text" name="Firstname" placeholder="Firstname" id="" class="Firstname" required>
+                <input type="text" name="LastName" placeholder="LastName" id="" class="LastName" required>
+                <input type="text" name="Email" placeholder="Email" id="" class="Email" required>
+                <input type="text" name="username" placeholder="Username" id="" class="Signup_username" required>
+                <input type="text" name="password" placeholder="Password" id="" class="Signup_password" required >
+                <input type="text" name="password" placeholder="Password Again" id="" class="password_check" required>
+                <input type="button" class="to_signup_button" id="register" value="Sign Up"> 
             </div>
             <div class="signin">
                 <h1 class="signin_text">Check your stocks...</h1>
-                <input type="button" class="signin_button" id="signin" onclick="SignIn()" value="Sign In"> 
+                <input type="button" class="signin_button" id="signin" value="Sign In"> 
             </div>
         </div>
     </div>

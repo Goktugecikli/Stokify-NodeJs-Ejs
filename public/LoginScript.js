@@ -19,7 +19,7 @@ var x = document.getElementById("to_signup_button");
 
 var a = document.getElementById("box");
 var b = document.getElementById("box2");
-var signupButtom = document.getElementById('tosignup');
+var signupButton = document.getElementById('tosignup');
 
 
 function SignIn(){
@@ -72,6 +72,45 @@ document.addEventListener('DOMContentLoaded', function() {
       
     });
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+
+    var registerBtn = document.getElementById("register");
+
+    registerBtn.addEventListener('click', async function(){
+        const firstName = document.querySelector('.Firstname').value;
+        const lastName = document.querySelector('.LastName').value;
+        const email = document.querySelector('.Email').value;
+        const username = document.querySelector('.Signup_username').value;
+        const password = document.querySelector('.Signup_password').value;
+        const passwordCheck = document.querySelector('.password_check').value;
+
+        if(password !== passwordCheck){
+            alert("Uyuşmuyor");
+            return;
+        }
+
+        const response = await fetch('/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ firstName,lastName,email,username,password})
+        });
+        
+        const result = await response.json();
+        console.log(JSON.stringify(result));
+        if (result.success) {
+            
+            window.location.href = result.redirectUrl;
+        } else {
+            alert(result.message);
+        }
+    })
+});
+
+
+
 
 
 

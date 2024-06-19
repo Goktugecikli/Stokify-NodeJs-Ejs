@@ -5,20 +5,20 @@ class UserRepository {
         this.db = new DatabaseManager(dbConfig);
     }
 
-     async GetUserByNameAndPassword(username, password) {
+    async GetUserByNameAndPassword(username, password) {
         try {
             await this.db.connectDB(); // Veritabanına bağlan
-            let params = {username: username, password: password};
+            let params = { username: username, password: password };
             let query = "SELECT COUNT(*) AS count FROM Users WHERE username = @username AND password = @password";
             let result = await this.db.queryWithResult(query, params);
             return result[0].count;
         } catch (err) {
-            console.error('Error repossitory connection. Err ' , err);
+            console.error('Error repossitory connection. Err ', err);
         } finally {
             await this.db.closeDB(); // Veritabanı bağlantısını kapat
         }
     }
-    
+
     async getUserById(username) {
         try {
             await this.db.connectDB();
@@ -37,6 +37,30 @@ class UserRepository {
         }
     }
 
+    async Register(firstName, lastName, email, userName, password) {
+        let params =
+        {
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            userName: userName,
+            password: password
+        }
+
+
+        try {
+            await this.db.connectDB();
+
+            let query = "INSERT INTO Users (Username,Password,Firstname,LastName,Email) VALUES (@userName,@password,@firstName,@lastName,@email)";
+            let result = await this.db.queryWithoutResult(query, params);
+            return result;
+        } catch (error) {
+            console.log("register error : "+ error);
+        }
+        finally {
+            await this.db.closeDB(); // Veritabanı bağlantısını kapat
+        }
+    }
 
 }
 

@@ -42,23 +42,25 @@
     border: 1px solid rgba(255,255,255,0.18);
 }
 
-.username{
+
+.Firstname , .LastName,.Signup_username,.username,.Email,.password,.Signup_password,.password_check {
     border: 1px solid #2cb889;
     border-radius: 0.5rem;
     text-align: center;
-    width: 70%;
+    width: 70%; 
     max-width: 600px;
-    height: 8%;
+    height: 6%;
     text-decoration: none;
 }
 
-.password{
-    text-align: center;
-    border-radius: 0.5rem;
-    border: 1px solid #2cb889;
-    width: 70%;
-    max-width: 600px;
-    height: 8%;
+
+
+/* .Signup_password::placeholder{
+    font-size: large;
+}
+
+.Signup_username::placeholder{
+    font-size: large;
 }
 .password::placeholder{
     font-size: large;
@@ -69,7 +71,7 @@
 
 .company_name::placeholder{
     font-size: large;
-}
+} */
 
 .login{
     width: 50%;
@@ -193,6 +195,7 @@
 }
 
 .signup_page{
+    padding:2% ;
     width: 50%;
     max-width: 600px;
     display: flex;
@@ -206,7 +209,7 @@
 .to_signup_button{
     width: 50%;
     max-width: 600px;
-    height: 3rem;
+    height: 2.5rem;
     border: 1px solid aliceblue;
     border-radius:1.5rem;
     background-color:#2cb889 ;
