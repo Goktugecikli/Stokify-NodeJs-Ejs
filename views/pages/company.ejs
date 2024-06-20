@@ -10,7 +10,40 @@
 </head>
 <body id="body">
     <%- include('../partials/sidebar') %>
-    <div class="company__info">
+    <div class="company__container">
+        <div class="company__info">
+            <div class="company__title">
+                <div class="company__pic">
+                    <img src="/company_pp.jpg" class="company__pp" alt="">
+                </div>
+                <div class="company__name">
+                    <p>Company Name</p>
+                </div>
+            </div>
+        </div>
+        <div class="company__details">
+            <div class="detail">
+                <h2 class="company_details_label">Owner Name Surname:</h2>
+                <span class="company_details_value"><%= user.Firstname %> <%= user.LastName %></span>
+            </div>
+            <div class="detail">
+                <h2 class="company_details_label">Email:</h2>
+                <p class="company_details_value"><%= user.Email %></p>
+            </div>
+            <div class="detail">
+                <h2 class="company_details_label">Username:</h2>
+                <span class="company_details_value"><%= user.Username %></span>
+            </div>
+            <div class="detail">
+                <h2 class="company_details_label">Password:</h2>
+                <div class="password-container">
+                    <input type="password" id="userPassword" class="company_details_value password-input" value="<%= user.Password %>" readonly>
+                    <button class="toggle-password" onclick="togglePassword()">Show</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="company__info">
         <div class="company__title">
             <div class="company__pic">
                 <img src="/company_pp.jpg" class="company__pp" alt="">
@@ -30,15 +63,19 @@
             <span class="company_details_value"><%= user.LastName %> </span>
         </div>
         <div>
-            <h2 class="company_details_label">Adress:</h2>
-            <p class="company_details_value">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Temporibus iure, numquam, qui est quibusdam aperiam maiores eligendi quidem cupiditate blanditiis ipsa facere fugit corporis reiciendis? Delectus modi quas, impedit sit voluptate deleniti dolorum ratione error saepe qui non! Deleniti tempora, ullam eligendi eius voluptas maxime nihil, consequuntur enim eveniet porro, accusantium doloribus facilis quis. Iste eveniet quas id minus voluptatem, mollitia velit et ducimus ipsam aliquid omnis incidunt sed praesentium dolores libero accusantium harum. Animi earum, voluptas, quos, fugiat consequatur sint doloremque architecto esse modi officia aliquid quae amet nihil unde quibusdam. Sunt eos earum quibusdam, at molestiae consequatur corporis?</p>
+            <h2 class="company_details_label">Email:</h2>
+            <p class="company_details_value"><%= user.Email %></p>
+        </div>
+        <div>
+            <h2 class="company_details_label">Email:</h2>
+            <p class="company_details_value"><%= user.Email %></p>
         </div>
     </div>
     <div>
         <div class=""></div>
         <div></div>
         <div></div>
-    </div>
+    </div> -->
     <!-- MAIN JS -->
     <script src="/MainScript.js"></script>
 </body>

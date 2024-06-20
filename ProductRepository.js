@@ -1,4 +1,4 @@
-import DbManager from "./DbManager.js";
+  import DbManager from "./DbManager.js";
 
 class ProductRepository {
   constructor(dbConfig) {

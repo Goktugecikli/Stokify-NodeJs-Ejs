@@ -191,85 +191,152 @@ a {
   transition: .5s;
 }
 
-.company__info {
-  margin-right: 1.5rem;
-  background-color: #4e9c83;
-}
-
-.company__pic {
-  width: 10%;
+.company__container {
   max-width: 1200px;
-  margin-bottom: 0%;
-  margin-left: 0%;
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-  place-items: center;
-  display: grid;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.company__pp {
-  width: 100px;
-  border-radius: 100px;
-}
-
-.company__name {
-  display: grid;
-  place-items: center;
-
-  width: 90%;
-  font-size: x-large;
-  color: white;
+.company__info {
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 .company__title {
-
   display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-@media screen and (max-width:768px) {
-  .company__pic {
-    width: 90%;
-  }
+.company__pic {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
 
-  .company__name {
-    width: 90%;
-  }
+.company__pic img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
-  .company__info {
-    width: 95;
-  }
-
-  .company__title {
-    width: 95%;
-  }
-
+.company__name p {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
 }
 
 .company__details {
-  box-shadow: 4px 4px 10px 5px rgba(0, 0, 0, 0.316);
-  padding: 10px;
-  border-radius: 20px;
-  margin-right: 1.5rem;
-  margin-top: 1rem;
-  background-color: #ffff ;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  width: 100%;
+}
+
+.detail {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #ddd; /* Hafif bir border ekledim */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Daha belirgin bir gölge ekledim */
 }
 
 .company_details_label {
-  padding: 5px;
-  border-left: 6px solid #4e9c83;
-  border-radius: 5px;
-  /* box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.316); */
-
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 5px;
 }
+
+.company_details_value {
+  font-size: 16px;
+  color: #333;    
+}
+
+.password-container {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Şifre kutusunu ortaladım */
+}
+
+.password-input {
+  border: none;
+  background-color: transparent;
+  font-size: 16px;
+  color: #333;
+  margin-right: 10px;
+}
+
+.toggle-password {
+  border: none;
+  background-color: #4e9c83; /* Rengini değiştirdim */
+  color: white;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 15px; /* Border radius ekledim */
+}
+
+.toggle-password:hover {
+  background-color: #3e7f68; /* Hover durumunda rengini değiştirdim */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .company__details {
+      grid-template-columns: 1fr;
+  }
+
+  .company__pic {
+      width: 120px;
+      height: 120px;
+  }
+
+  .company__name p {
+      font-size: 20px;
+  }
+
+  .detail {
+      padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .company__pic {
+      width: 100px;
+      height: 100px;
+  }
+
+  .company__name p {
+      font-size: 18px;
+  }
+
+  .detail {
+      padding: 10px;
+  }
+
+  .company_details_label {
+      font-size: 16px;
+  }
+
+  .company_details_value {
+      font-size: 14px;
+  }
+} 
+
+
 
 .company_details_value {
   padding: 5px;
   display: block;
-  background-color: #f7f7f780;
-  border: 1px solid #00000039;
+  /* background-color: #f7f7f780; */
+  /* border: 1px solid #00000039; */
   border-radius: 10px;
-  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.316);
-}
+  /* box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.316); */
+} 
 
 
 .form-container {

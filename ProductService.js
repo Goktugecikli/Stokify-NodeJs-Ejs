@@ -1,3 +1,4 @@
+// import { json } from "body-parser";
 import ProductRepository from "./ProductRepository.js";
 
 class ProductService {
@@ -36,80 +37,81 @@ class ProductService {
       );
     }
   }
-  async AddProduct(productToAdd) {
-    try {
-      // Check if product exists
-      let product = await this.ProductIsExists(productToAdd);
-      let id, currentQuantityOfProduct = 0;
-  
-      if (product.length === 0) {
-        // Product does not exist, add it
-        let resultToAdd = await this.productRepository.AddProduct(productToAdd);
-        if (!resultToAdd || resultToAdd.length === 0 || !resultToAdd[0].AddedProductId) {
+    async AddProduct(productToAdd) {
+      try {
+        // Check if product exists
+        let product = await this.ProductIsExists(productToAdd);
+        let id, currentQuantityOfProduct = 0;
+    
+        if (product.length === 0) {
+          // Product does not exist, add it
+          let resultToAdd = await this.productRepository.AddProduct(productToAdd);
+          if (!resultToAdd || resultToAdd.length === 0 || !resultToAdd[0].AddedProductId) {
+           console.log(JSON.stringify(success));
+            return {
+              success: false,
+              message: "Error occurred while adding the product.",
+            };
+          }
+          id = resultToAdd[0].Id;
+          currentQuantityOfProduct = await this.productRepository.GetQuantityByProductId(resultToAdd[0].AddedProductId);
+        } else {
+          // Product exists, retrieve its ID and current quantity
+          id = product[0].Id;
+          currentQuantityOfProduct = await this.productRepository.GetQuantityByProductId(product[0].Id);
+        }
+    
+        currentQuantityOfProduct = currentQuantityOfProduct[0].quantity;
+    
+        // Determine operation type (increase or decrease)
+        let operationType = await this.productRepository.GetOperationTypeById(productToAdd.operationType);
+        if (!operationType || operationType.length === 0) {
           return {
             success: false,
-            message: "Error occurred while adding the product.",
+            message: `Operation type ${productToAdd.operationType} not found.`,
           };
         }
-        id = resultToAdd[0].Id;
-        currentQuantityOfProduct = await this.productRepository.GetQuantityByProductId(resultToAdd[0].AddedProductId);
-      } else {
-        // Product exists, retrieve its ID and current quantity
-        id = product[0].Id;
-        currentQuantityOfProduct = await this.productRepository.GetQuantityByProductId(product[0].Id);
-      }
-  
-      currentQuantityOfProduct = currentQuantityOfProduct[0].quantity;
-  
-      // Determine operation type (increase or decrease)
-      let operationType = await this.productRepository.GetOperationTypeById(productToAdd.operationType);
-      if (!operationType || operationType.length === 0) {
+    
+        // Parse quantity to add
+        let quantityToAdd = parseInt(productToAdd.quantity);
+        if (isNaN(quantityToAdd)) {
+          return {
+            success: false,
+            message: `Invalid quantity: ${productToAdd.quantity}`,
+          };
+        }
+    
+        // Adjust quantity based on operation type
+        let resultQuantity = operationType[0].IsIncrease ? 
+                            currentQuantityOfProduct + quantityToAdd :
+                            currentQuantityOfProduct - quantityToAdd;
+    
+        if (resultQuantity < 0 && !operationType[0].IsIncrease) {
+          return {
+            success: false,
+            message: `Insufficient stock. Current quantity: ${currentQuantityOfProduct}`,
+          };
+        }
+    
+        // Update quantity in the database
+        let result = await this.productRepository.SetQuantity(resultQuantity, id);
+        if (result[0] === 0) {
+          return {
+            success: false,
+            message: "Error occurred while updating quantity.",
+          };
+        }
+        
+        return { success: true};
+      } catch (err) {
+        console.log("Error adding product at ProductService:", err);
         return {
           success: false,
-          message: `Operation type ${productToAdd.operationType} not found.`,
+          message: "Error occurred while adding the product.",
         };
       }
-  
-      // Parse quantity to add
-      let quantityToAdd = parseInt(productToAdd.quantity);
-      if (isNaN(quantityToAdd)) {
-        return {
-          success: false,
-          message: `Invalid quantity: ${productToAdd.quantity}`,
-        };
-      }
-  
-      // Adjust quantity based on operation type
-      let resultQuantity = operationType[0].IsIncrease ? 
-                           currentQuantityOfProduct + quantityToAdd :
-                           currentQuantityOfProduct - quantityToAdd;
-  
-      if (resultQuantity < 0 && !operationType[0].IsIncrease) {
-        return {
-          success: false,
-          message: `Insufficient stock. Current quantity: ${currentQuantityOfProduct}`,
-        };
-      }
-  
-      // Update quantity in the database
-      let result = await this.productRepository.SetQuantity(resultQuantity, id);
-      if (result[0] === 0) {
-        return {
-          success: false,
-          message: "Error occurred while updating quantity.",
-        };
-      }
-  
-      return { success: true };
-    } catch (err) {
-      console.log("Error adding product at ProductService:", err);
-      return {
-        success: false,
-        message: "Error occurred while adding the product.",
-      };
     }
+    
   }
-  
-}
 
 export default ProductService;

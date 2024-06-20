@@ -67,7 +67,7 @@ console.log(JSON.stringify(response))
   console.log("test: ", result);
   if (result.success) {
     //   window.location.href = result.redirectUrl;
-    alert("Eklendi")
+    alert("Eklendi");
   } else {
     alert(result.message);
   }

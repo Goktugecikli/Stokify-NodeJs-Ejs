@@ -25,7 +25,8 @@ class UserService {
     }
 
     async Register(firstName,lastName,email,userName,password){
-        try {
+        try { 
+            
             var result = await this.userRepository.Register(firstName, lastName, email, userName, password);
             if(result === 0){
                 return false;
