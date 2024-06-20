@@ -6,15 +6,12 @@ import { fileURLToPath } from "url";
 import DatabaseManager from "./DbManager.js";
 import UserService from "./UserService.js";
 import FileStoreFactory from "session-file-store";
-import UserRepository from "./UserRepository.js";
 import ProductService from "./ProductService.js";
 import CompanyService from "./CompanyService.js";
 
 const db = new DatabaseManager();
 
 const FileStore = FileStoreFactory(session);
-const userRepository = new UserRepository();
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const app = express();
@@ -89,8 +86,7 @@ app.get("/home", requireAuth, async (req, res) => {
   try {
     const username = req.session.user;
     console.log(req.session.user);
-    const user = await userRepository.getUserById(username);
-
+    let user = await userService.IsExistUser(username);
     if (!user) {
       return res.status(404).send("User not found");
     }
@@ -104,10 +100,9 @@ app.get("/home", requireAuth, async (req, res) => {
 
 app.get("/user-profile", requireAuth, async (req, res) => {
   try {
-    const username = req.session.user;
+    const userName = req.session.user;
     // console.log(req.session.user);
-
-    const user = await userRepository.getUserById(username);
+    let user = await userService.IsExistUser(userName);
     if (!user) {
       return res.status(404).send("User not found");
     }
@@ -132,8 +127,7 @@ app.get("/approvals", requireAuth, (req, res) => res.render("pages/approvals"));
 // });
 app.post("/auth", async (req, res) => {
   const { username, password } = req.body;
-  // console.log(req.session.user)
-  // console.log(username + " "  + password);
+
   var userService = new UserService();
   const isValidUser = await userService.validateUser(username, password);
   if (isValidUser > 0) {
@@ -179,7 +173,6 @@ app.get("/api/product/get-all-operation-types", async (req, res) => {
 });
 app.post("/api/product/add-product", async (req, resp) => {
   let result = await productService.AddProduct(req.body);
-  console.log(JSON.stringify(result));
   resp.json(JSON.stringify(result));
 });
 app.post("/api/user/join-company-by-company-id", async (req, resp) => {
@@ -187,7 +180,6 @@ app.post("/api/user/join-company-by-company-id", async (req, resp) => {
   let invateCode = req.body.inviteCode;
   const userName = req.session.user;
   var result = await userService.JoinCompanyByInvateCode(invateCode, userName);
-  console.log(JSON.stringify(result))
   resp.json(JSON.stringify(result));
 });
 
