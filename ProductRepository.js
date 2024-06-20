@@ -1,8 +1,8 @@
-  import DbManager from "./DbManager.js";
+  import dbManager from "./DbManager.js";
 
 class ProductRepository {
   constructor(dbConfig) {
-    this.DbManager = new DbManager(dbConfig);
+    this.DbManager = new dbManager(dbConfig);
   }
 
   async GetProductOperationTypes() {
@@ -24,7 +24,7 @@ class ProductRepository {
     try {
       await this.DbManager.connectDB();
       let query =
-        "INSERT INTO Products (ProductName, Brand, Barcode, Quantity) VALUES (@productName, @brand,@barcode, 0);;SELECT SCOPE_IDENTITY() AS Id";
+        "INSERT INTO Products (ProductName, Brand, Barcode, Quantity) VALUES (@productName, @brand,@barcode, 0);SELECT SCOPE_IDENTITY() AS Id;";
       return await this.DbManager.queryWithResult(query, productToAdd);
     } catch (error) {
       console.log(
