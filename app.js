@@ -8,6 +8,7 @@ import UserService from "./UserService.js";
 import FileStoreFactory from "session-file-store";
 import UserRepository from "./UserRepository.js";
 import ProductService from "./ProductService.js";
+import CompanyService from "./CompanyService.js";
 
 const db = new DatabaseManager();
 
@@ -17,7 +18,10 @@ const userRepository = new UserRepository();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const app = express();
+
 const productService = new ProductService();
+const userService = new UserService();
+const companyService = new CompanyService();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -98,16 +102,19 @@ app.get("/home", requireAuth, async (req, res) => {
   // res.render('pages/home')
 });
 
-app.get("/company", requireAuth, async (req, res) => {
+app.get("/user-profile", requireAuth, async (req, res) => {
   try {
     const username = req.session.user;
-    console.log(req.session.user);
-    const user = await userRepository.getUserById(username);
+    // console.log(req.session.user);
 
+    const user = await userRepository.getUserById(username);
     if (!user) {
       return res.status(404).send("User not found");
     }
-    res.render("pages/company", { user: user[0] });
+    let companyResultArr = await userService.GetCompanyByUserId(user[0].UserId);
+    let company = null;
+    if (companyResultArr) company = companyResultArr[0];
+    res.render("pages/user-profile", { user: user[0], companyData: company });
   } catch (err) {
     console.error("Error fetching user data:", err);
     res.status(500).send("Error fetching user data");
@@ -168,13 +175,22 @@ app.post("/register", async (req, res) => {
 
 app.get("/api/product/get-all-operation-types", async (req, res) => {
   var result = await productService.GetProductOperationsTypes();
-  res.json(result);
+  res.json(JSON.stringify(result));
 });
 app.post("/api/product/add-product", async (req, resp) => {
-   let result =  await productService.AddProduct(req.body);
-   console.log(JSON.stringify(result));
-   return result;
+  let result = await productService.AddProduct(req.body);
+  console.log(JSON.stringify(result));
+  resp.json(JSON.stringify(result));
 });
+app.post("/api/user/join-company-by-company-id", async (req, resp) => {
+  console.log(`Gelen Body: ${JSON.stringify(req.body)}`);
+  let invateCode = req.body.inviteCode;
+  const userName = req.session.user;
+  var result = await userService.JoinCompanyByInvateCode(invateCode, userName);
+  console.log(JSON.stringify(result))
+  resp.json(JSON.stringify(result));
+});
+
 // Sunucuyu başlatın
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
