@@ -46,8 +46,6 @@ class UserRepository {
             userName: userName,
             password: password
         }
-
-
         try {
             await this.db.connectDB();
 

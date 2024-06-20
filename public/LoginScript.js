@@ -31,6 +31,7 @@ function SignIn(){
 document.addEventListener('DOMContentLoaded', function() {
     var loginButton = document.getElementById('login');
     loginButton.addEventListener('click', async function() {
+        
         var username = document.getElementById('username').value;
         var password = document.getElementById('password').value;
         

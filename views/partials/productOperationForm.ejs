@@ -2,30 +2,28 @@
     <h2>Ürün Bilgi Giriş Formu</h2>
     <form id="productForm">
         <div class="form-group">
-            <label for="islemTuru">İşlem Türü</label>
-            <select id="islemTuru" name="islemTuru" onchange="handleIslemTuruChange()">
+            <label for="operationType">İşlem Türü</label>
+            <select id="operationType" name="operationType" onchange="handleOperationTypeChange()">
                 <option value="">Seçiniz</option>
-                <option value="1">İşlem Türü 1</option>
-                <option value="2">İşlem Türü 2</option>
-                <option value="3">İşlem Türü 3</option>
             </select>
         </div>
         <div class="form-group">
-            <label for="urunAdi">Ürün Adı</label>
-            <input type="text" id="urunAdi" name="urunAdi" disabled>
+            <label for="productName">Ürün Adı</label>
+            <input type="text" id="productName" name="productName" disabled>
         </div>
         <div class="form-group">
-            <label for="marka">Marka</label>
-            <input type="text" id="marka" name="marka" disabled>
+            <label for="brand">Marka</label>
+            <input type="text" id="brand" name="brand" disabled>
         </div>
         <div class="form-group">
-            <label for="barkodNo">Barkod No</label>
-            <input type="text" id="barkodNo" name="barkodNo" disabled>
+            <label for="barcode">Barkod No</label>
+            <input type="text" id="barcode" name="barcode" disabled>
         </div>
-        <div class="form-group" id="adetSayisiGroup">
-            <label for="adetSayisi">Adet Sayısı</label>
-            <input type="number" id="adetSayisi" name="adetSayisi" disabled>
+        <div class="form-group" id="quantityGroup">
+            <label for="quantity">Adet Sayısı</label>
+            <input type="number" id="quantity" name="quantity" disabled>
         </div>
-        <button type="submit">Kaydet</button>
+        <button  id="saveProduct">İşlemi Kaydet</button>
     </form>
 </div>
+

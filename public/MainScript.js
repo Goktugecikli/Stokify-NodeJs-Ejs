@@ -26,27 +26,3 @@ function colorLink(){
 
 linkColor.forEach(l => l.addEventListener('click', colorLink));
 
-function handleIslemTuruChange() {
-    var selectBox = document.getElementById("islemTuru");
-    var urunAdiInput = document.getElementById("urunAdi");
-    var markaInput = document.getElementById("marka");
-    var barkodNoInput = document.getElementById("barkodNo");
-    var adetSayisiGroup = document.getElementById("adetSayisiGroup");
-    var adetSayisiInput = document.getElementById("adetSayisi");
-    
-    if (selectBox.value !== "") {
-        urunAdiInput.disabled = false;
-        markaInput.disabled = false;
-        barkodNoInput.disabled = false;
-        adetSayisiGroup.style.display = "block";
-        adetSayisiInput.disabled = false;
-    } else {
-        urunAdiInput.disabled = true;
-        markaInput.disabled = true;
-        barkodNoInput.disabled = true;
-        adetSayisiGroup.style.display = "none";
-        adetSayisiInput.disabled = true;
-    }
-}
-
-
