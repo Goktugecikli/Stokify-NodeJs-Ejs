@@ -3,13 +3,13 @@ import express from "express";
 import session from "express-session";
 import bodyParser from "body-parser";
 import { fileURLToPath } from "url";
-import DatabaseManager from "./DbManager.js";
-import UserService from "./UserService.js";
 import FileStoreFactory from "session-file-store";
+
+import UserService from "./UserService.js";
 import ProductService from "./ProductService.js";
 import CompanyService from "./CompanyService.js";
 
-const db = new DatabaseManager();
+
 
 const FileStore = FileStoreFactory(session);
 const __filename = fileURLToPath(import.meta.url);
