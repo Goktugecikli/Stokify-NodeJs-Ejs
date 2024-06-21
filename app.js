@@ -200,6 +200,7 @@ app.post("/api/product/add-product", async (req, resp) => {
     userId,
     userCompanyId
   );
+  console.log(`AppJS: ${JSON.stringify(result)}`);
   resp.json(JSON.stringify(result));
 });
 app.post("/api/user/join-company-by-company-id", async (req, resp) => {

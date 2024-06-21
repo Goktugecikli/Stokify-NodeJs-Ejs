@@ -19,9 +19,10 @@ class CompanyService {
 
     return result;
   }
-  async IsCompanyHasProduct(productId, userName) {
+  async IsCompanyHasProduct(productId, userCompanyId) {
     try {
-      return await UserRepository.IsCompanyHasProduct(productId, userName);
+      console.log(`ISCOMPANYHASPRD: ${productId}, ${userCompanyId}`);
+      return await this.companyRepository.IsCompanyHasProduct(productId, userCompanyId);
     } catch (err) {
       console.log("Company Product is exists err");
     }

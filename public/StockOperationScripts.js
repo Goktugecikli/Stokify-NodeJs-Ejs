@@ -34,7 +34,7 @@ function isFormDataValid(form) {
     if (value.trim() === "") {
       // Boş değer bulundu, uyarı göster ve fonksiyondan çık
       alert("Lütfen Bütün Alanları Doldurunuz.");
-      return false;
+      return (false);
     }
   }
   // Tüm değerler dolu
@@ -66,15 +66,13 @@ async function handleFormSubmit(event) {
     },
     body: JSON.stringify(jsonObject),
   });
-  console.log(JSON.stringify(response));
-  const result = await response.json();
-  console.log("test: ", result);
-  if (result.success) {
-    //   window.location.href = result.redirectUrl;
-    alert("Eklendi");
-  } else {
-    alert(result.message);
+  if (!response.ok) {
+    throw new Error("HTTP error " + response.status);
   }
+  let responseJSON = await response.json();
+  let result = JSON.parse(responseJSON);
+  console.log("test: ", result);
+  alert(result.message);
 }
 
 async function fetchIslemTurleri() {
