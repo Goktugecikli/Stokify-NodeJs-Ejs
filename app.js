@@ -34,7 +34,18 @@ app.use(
   })
 );
 
-// -----------------------------------
+
+//#endregion
+
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+
+// Statik dosyalar için klasörü ayarlayın
+app.use(express.static(path.join(__dirname, "public")));
+
+
+
+//#region Middleware Func
 
 function checkAuth(req, res, next) {
   if (req.session.user) {
@@ -50,15 +61,6 @@ function requireAuth(req, res, next) {
   }
   next();
 }
-
-//------------------------------------------
-
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
-
-// Statik dosyalar için klasörü ayarlayın
-app.use(express.static(path.join(__dirname, "public")));
-
 
 //#region  Pages Rotates
 

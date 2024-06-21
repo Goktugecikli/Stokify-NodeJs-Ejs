@@ -91,7 +91,7 @@ class UserRepository {
     };
     try {
       await this.dbManager.connectDB();
-      let query = "INSERT INTO Users (Username, Password, Firstname, LastName, Email) VALUES (@userName, @password, @firstName, @lastName, @email)";
+      let query = "INSERT INTO Users (Username, Password, Firstname, LastName, Email, CreatedAt) VALUES (@userName, @password, @firstName, @lastName, @email, getDate());";
       await this.dbManager.queryWithoutResult(query, params);
     } catch (err) {
       console.error("Error registering user:", err);
