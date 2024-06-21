@@ -142,7 +142,7 @@ app.post("/auth", async (req, res) => {
     req.session.authorized = true;
     res.json({ success: true, redirectUrl: "/home" });
   } else {
-    res.json({ success: false, message: "Bilgiler yanlış" });
+    res.json({ success: false, message: "Kullanıcı adı veya şifre yanlış." });
   }
 });
 
