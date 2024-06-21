@@ -73,12 +73,12 @@ class CompanyRepository {
       await this.dbManager.closeDB(); // Veritabanı bağlantısını kapat
     }
   }
-  async AddProductToCompanyByUserNameAndProduct_id(productId, userName) {
+  async AddProductToCompanyIdAndProductTableId(productId, companyId) {
     try {
       await this.dbManager.connectDB(); // Veritabanına bağlan
-      let params = { id: productId, userName: userName };
+      let params = { id: productId, companyId: companyId };
       let query =
-        "INSERT INTO CompanyProducts (ProductId, CompanyId) VALUES ((select ProductId from Products where Id=@id),(Select CompanyId from CompanyUsers where UserId = (Select UserId from Users where UserName=@userName)));SELECT SCOPE_IDENTITY() AS Id;";
+        "INSERT INTO CompanyProducts (ProductId, CompanyId) VALUES ((select ProductId from Products where Id=@id), @companyId);SELECT SCOPE_IDENTITY() AS Id;";
       return await this.dbManager.queryWithResult(query, params);
     } catch (err) {
       // console.error("Error repossitory connection. Error ", err);

@@ -88,12 +88,11 @@ class CompanyService {
       console.error("Error copmany find", err);
     }
   }
-  async AddProductToCompanyByUserNameAndProduct_id(product_id, userName) {
+  async AddProductToCompanyIdAndProductTableId(productTableId, copmanyId) {
     try {
-      console.log(product_id, userName);
-      return await this.companyRepository.AddProductToCompanyByUserNameAndProduct_id(
-        product_id,
-        userName
+        return await this.companyRepository.AddProductToCompanyIdAndProductTableId(
+        productTableId,
+        copmanyId
       );
     } catch (err) {
       console.error("Error copmany find", err);

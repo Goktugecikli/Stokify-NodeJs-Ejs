@@ -55,7 +55,7 @@ class ProductRepository {
     }
   }
 
-  async CreateProduct(productToAdd, userName) {
+  async CreateProduct(productToAdd, userId) {
     try {
       await this.DbManager.connectDB();
       let params = {
@@ -63,10 +63,10 @@ class ProductRepository {
         brand: productToAdd.brand,
         barcode: productToAdd.barcode,
         quantity: productToAdd.quantity,
-        userName: userName,
+        userId: userId,
       };
       let query =
-        "INSERT INTO Products (ProductName, Brand, Barcode, Quantity,CreatedBy, CreatedAt) VALUES (@productName, @brand,@barcode, @quantity, @userName, getDate());SELECT SCOPE_IDENTITY() AS Id;";
+        "INSERT INTO Products (ProductName, Brand, Barcode, Quantity,CreatedBy, CreatedAt) VALUES (@productName, @brand,@barcode, @quantity, @userId, getDate());SELECT SCOPE_IDENTITY() AS Id;";
       return await this.DbManager.queryWithResult(query, params);
     } catch (error) {
       console.log(
