@@ -1,9 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- SwalFire -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+     <!-- SwalFire END -->
     <link rel="stylesheet" type="text/css" href="/Login.css">
     <title>Stockify</title>
 
@@ -13,26 +21,27 @@
 
     <div class="main" id="main">
         <div class="project_name" id="project_name">
-            <p  >STOCKIFY</p>
+            <p>STOCKIFY</p>
         </div>
         <div class="glass" id="box">
             <div class="login">
                 <p class="login_text">LOG IN</p>
-                    <div class="social">
-                        <a href=""><i class="fa-brands fa-instagram"></i></a>
-                        <a href=""><i class="fa-brands fa-twitter"></i></a>
-                        <a href=""><i class="fa-brands fa-linkedin-in"></i></a>
-                        <a href=""><i class="fa-brands fa-facebook"></i></a>
-                    </div>
+                <div class="social">
+                    <a href=""><i class="fa-brands fa-instagram"></i></a>
+                    <a href=""><i class="fa-brands fa-twitter"></i></a>
+                    <a href=""><i class="fa-brands fa-linkedin-in"></i></a>
+                    <a href=""><i class="fa-brands fa-facebook"></i></a>
+                </div>
                 <input type="text" name="username" placeholder="Username" id="username" class="username">
                 <input type="password" name="password" placeholder="Password" id="password" class="password">
-                <input type="button" class="login_button" value="Login" id="login" >
+                <input type="button" class="login_button" value="Login" id="login">
             </div>
             <div class="signup">
                 <h1 class="signup_text">Hello Friend,</h1>
-                <p class="join_us">Are you struggling to keep track of your stocks? Join us, where even the most financially challenged find 
+                <p class="join_us">Are you struggling to keep track of your stocks? Join us, where even the most
+                    financially challenged find
                     solace in our chaotic market adventures!</p>
-                <input type="button" class="signup_button" id="tosignup" value="Join Us"> 
+                <input type="button" class="signup_button" id="tosignup" value="Join Us">
             </div>
         </div>
 
@@ -44,18 +53,21 @@
                 <input type="text" name="LastName" placeholder="LastName" id="" class="LastName" required>
                 <input type="text" name="Email" placeholder="Email" id="" class="Email" required>
                 <input type="text" name="username" placeholder="Username" id="" class="Signup_username" required>
-                <input type="text" name="password" placeholder="Password" id="" class="Signup_password" required >
+                <input type="text" name="password" placeholder="Password" id="" class="Signup_password" required>
                 <input type="text" name="password" placeholder="Password Again" id="" class="password_check" required>
-                <input type="button" class="to_signup_button" id="register" value="Sign Up"> 
+                <input type="button" class="to_signup_button" id="register" value="Sign Up">
             </div>
             <div class="signin">
                 <h1 class="signin_text">Check your stocks...</h1>
-                <input type="button" class="signin_button" id="signin" value="Sign In"> 
+                <input type="button" class="signin_button" id="signin" value="Sign In">
             </div>
         </div>
     </div>
-   
+
 </body>
-<script   type="module"  src="/LoginScript.js"></script>
+<script type="module" src="/LoginScript.js"></script>
+<!-- Toastify -->
+
+<!--  -->
 
 </html>

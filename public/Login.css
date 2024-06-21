@@ -15,7 +15,12 @@
     align-items: center;
 }
 
-
+.toastify-center {
+    /* top: 50%;
+    left: 50%; */
+    border-radius: 10px;
+    transform: translate(-50%, -50%);
+}
 
 .glass{
     width: 100%;

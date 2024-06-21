@@ -140,11 +140,11 @@ app.post("/api/user/auth", async (req, res) => {
 
   var userService = new UserService();
   const isValidUser = await userService.validateUser(username, password);
-  if (isValidUser || isValidUser.length > 0) {
+  if (isValidUser && isValidUser.length > 0) {
 
     let  userCompanyId=-1, companyOwnerUserId=-1;
     let companyInfoResult = await userService.GetCompanyByUserId(isValidUser[0].UserId);
-    if(companyInfoResult != null || companyInfoResult.length > 0){
+    if(companyInfoResult && companyInfoResult.length > 0){
       userCompanyId = companyInfoResult[0].CompanyId;
       companyInfoResult = companyInfoResult[0].CompanyOwnerUserId;
     }
