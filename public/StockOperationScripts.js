@@ -33,8 +33,19 @@ function isFormDataValid(form) {
   for (let [key, value] of formData.entries()) {
     if (value.trim() === "") {
       // Boş değer bulundu, uyarı göster ve fonksiyondan çık
-      alert("Lütfen Bütün Alanları Doldurunuz.");
-      return (false);
+      Swal.fire({
+        icon: "warning",
+        title: "Uyarı!",
+        text: "Lütfen bütün alanları doldurunuz",
+        confirmButtonText: "Anladım",
+        allowOutsideClick: false, // Dışarı tıklamayı kapat
+        allowEscapeKey: false, // ESC tuşunu kapat
+        allowEnterKey: true, // Enter tuşunu aç
+      }).then((result) => {
+        if (result.isConfirmed) {
+        }
+      });
+      return false;
     }
   }
   // Tüm değerler dolu
@@ -49,8 +60,20 @@ async function handleFormSubmit(event) {
   if (!validate) {
     return;
   }
-  if (quantity === 0) {
-    alert("0 dan büyük bir adet sayısı girmelisiniz");
+  console.log(quantity);
+  if (document.getElementById("quantity").value <= 0) {
+    Swal.fire({
+      icon: "error",
+      title: "Uyarı!",
+      text: `Lütfen Adet Sayısını 0'dan büyük yapınız`,
+      confirmButtonText: "Anladım",
+      allowOutsideClick: false, // Dışarı tıklamayı kapat
+      allowEscapeKey: false, // ESC tuşunu kapat
+      allowEnterKey: true, // Enter tuşunu aç
+    }).then((result) => {
+      if (result.isConfirmed) {
+      }
+    });
     return;
   }
 
@@ -70,15 +93,54 @@ async function handleFormSubmit(event) {
     throw new Error("HTTP error " + response.status);
   }
   let responseJSON = await response.json();
-  let result = JSON.parse(responseJSON);
-  console.log("test: ", result);
-  alert(result.message);
+  let resultResponse = JSON.parse(responseJSON);
+  if (resultResponse.success === false) {
+    Swal.fire({
+      icon: "error",
+      title: "Hata!",
+      text: resultResponse.message,
+      confirmButtonText: "Girişe Yönlendir",
+      allowOutsideClick: false, // Dışarı tıklamayı kapat
+      allowEscapeKey: false, // ESC tuşunu kapat
+      allowEnterKey: true, // Enter tuşunu aç
+    }).then((result) => {
+      if (result.isConfirmed) {
+      }
+    });
+    return;
+  }
+  Swal.fire({
+    icon: "success",
+    title: "Başarılı!",
+    text: resultResponse.message,
+    confirmButtonText: "Tamam",
+    allowOutsideClick: false, // Dışarı tıklamayı kapat
+    allowEscapeKey: false, // ESC tuşunu kapat
+    allowEnterKey: true, // Enter tuşunu aç
+  }).then((result) => {
+    if (result.isConfirmed) {
+      location.reload();
+    }
+  });
 }
 
 async function fetchIslemTurleri() {
   try {
     const response = await fetch("/api/product/get-all-operation-types"); // Node.js sunucusuna istek gönder
     if (!response.ok) {
+      Swal.fire({
+        icon: "error",
+        title: "İşlem türleri yüklenemdi",
+        text: response.status,
+        confirmButtonText: "Tamam",
+        allowOutsideClick: false, // Dışarı tıklamayı kapat
+        allowEscapeKey: false, // ESC tuşunu kapat
+        allowEnterKey: true, // Enter tuşunu aç
+      }).then((result) => {
+        if (result.isConfirmed) {
+          location.reload();
+        }
+      });
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
     const responseJson = await response.json(); // JSON formatında yanıtı al

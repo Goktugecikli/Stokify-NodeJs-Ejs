@@ -6,28 +6,6 @@ box.addEventListener("mouseenter", () => {
   projectName.style.top = "10%";
 });
 
-// box.addEventListener('mouseleave', () => {
-//     projectName.style.top = '30%';
-//     projectName.style.zIndex = -1;
-// });
-function showSuccessMessage() {
-  Swal.fire({
-    icon: 'success',
-    title: 'Başarılı!',
-    text: 'Form başarıyla gönderildi.',
-    confirmButtonText: 'Tamam',
-    allowOutsideClick: false, // Dışarı tıklamayı kapat
-    allowEscapeKey: false, // ESC tuşunu kapat
-    allowEnterKey: true // Enter tuşunu aç
-  }).then((result) => {
-    // Kullanıcı Tamam'a tıkladığında yapılacak işlemler buraya yazılır
-    if (result.isConfirmed) {
-      console.log('Kullanıcı Tamam\'a tıkladı');
-      // İşlem yapılabilir (örneğin başka bir sayfaya yönlendirme)
-    }
-  });
-}
-
 var x = document.getElementById("to_signup_button");
 
 var a = document.getElementById("box");
@@ -38,17 +16,7 @@ function SignIn() {
   b.style.display = "none";
   a.style.display = "flex";
 }
-// function GetAlertToastify(text,duration,close, backgroundColorStr,className){
-//     Toastify({
-//         text: text,
-//         duration: duration,
-//         close: close,
-//         gravity: "top", // "top" or "bottom"
-//         position: "center", // `left`, `center` or `right`
-//         backgroundColor: backgroundColorStr,
-//         className: className,
-//       }).showToast();
-// }
+
 document.addEventListener("DOMContentLoaded", function () {
   var loginButton = document.getElementById("login");
   loginButton.addEventListener("click", async function () {
@@ -102,16 +70,13 @@ document.addEventListener("DOMContentLoaded", function () {
         icon: 'danger',
         title: 'Hata!',
         text: 'Kullanıcı adı veya şifre yanlıştır.',
-        confirmButtonText: 'Özür Dilerim',
+        confirmButtonText: 'Anladım',
         allowOutsideClick: false, // Dışarı tıklamayı kapat
         allowEscapeKey: false, // ESC tuşunu kapat
         allowEnterKey: true // Enter tuşunu aç
       }).then((result) => {
-        if (result.isConfirmed) {
-          
-        }
+        if (result.isConfirmed) {}
       });
-        // GetAlertToastify(result.message, 2000,true, "linear-gradient(to right, #800101,#a10303)","toastify-center");
     }
   });
 });
@@ -139,41 +104,78 @@ document.addEventListener("DOMContentLoaded", function () {
     const firstName = document.querySelector(".Firstname").value;
     const lastName = document.querySelector(".LastName").value;
     const email = document.querySelector(".Email").value;
-    const username = document.querySelector(".Signup_username").value;
+    const userName = document.querySelector(".Signup_username").value;
     const password = document.querySelector(".Signup_password").value;
     const passwordCheck = document.querySelector(".password_check").value;
 
-    if (password !== passwordCheck) {
-      alert("Uyuşmuyor");
+    if (!firstName || !lastName ||!email  || !userName || !password || !passwordCheck){
+      Swal.fire({
+        icon: 'warning',
+        title: 'Uyarı!',
+        text: 'Bütün alanları doldurunuz',
+        confirmButtonText: 'Anladım',
+        allowOutsideClick: false, // Dışarı tıklamayı kapat
+        allowEscapeKey: false, // ESC tuşunu kapat
+        allowEnterKey: true // Enter tuşunu aç
+      }).then((result) => {
+        if (result.isConfirmed) {}
+      });
       return;
     }
 
+    if (password !== passwordCheck) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Uyarı!',
+        text: 'Şifreler Uyuşmuyor',
+        confirmButtonText: 'Anladım',
+        allowOutsideClick: false, // Dışarı tıklamayı kapat
+        allowEscapeKey: false, // ESC tuşunu kapat
+        allowEnterKey: true // Enter tuşunu aç
+      }).then((result) => {
+        if (result.isConfirmed) {}
+      });
+      return;
+    }
+    console.log(JSON.stringify({ firstName, lastName, email, username: userName, password }));
     const response = await fetch("/api/user/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ firstName, lastName, email, username, password }),
+      body: JSON.stringify({ firstName, lastName, email, username: userName, password }),
     });
 
-    const result = await response.json();
-    console.log(JSON.stringify(result));
-    if (result.success) {
-      window.location.href = result.redirectUrl;
+    const responseResult = await response.json();
+    console.log(JSON.stringify(responseResult));
+    if (responseResult.success) {
+      Swal.fire({
+        icon: 'success',
+        title: 'Başarılı!',
+        text: 'Kayıt İşlemi Başarılı',
+        confirmButtonText: 'Girişe Yönlendir',
+        allowOutsideClick: false, // Dışarı tıklamayı kapat
+        allowEscapeKey: false, // ESC tuşunu kapat
+        allowEnterKey: true // Enter tuşunu aç
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = responseResult.redirectUrl;
+        }
+      });
+      
     } else {
-      alert(result.message);
+      Swal.fire({
+        icon: 'danger',
+        title: 'Hata!',
+        text: responseResult.message,
+        confirmButtonText: 'Anladım',
+        allowOutsideClick: false, // Dışarı tıklamayı kapat
+        allowEscapeKey: false, // ESC tuşunu kapat
+        allowEnterKey: true // Enter tuşunu aç
+      }).then((result) => {
+        if (result.isConfirmed) {}
+      });
     }
   });
 });
 
-// function getAlert(msg, color) {
-//     Toastify({
-//         text: msg,
-//         duration: 3000,
-//         close: true,
-//         gravity: "top",
-//         position: 'center',
-//         backgroundColor: color,
-//         stopOnFocus: true,
-//     }).showToast();
-// };
