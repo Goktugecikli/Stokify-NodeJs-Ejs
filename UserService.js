@@ -69,6 +69,7 @@ class UserService {
       console.error("Error copmany find", err);
     }
   }
+
   async GetCompanyByUserId(userId) {
     try {
       var result = await this.userRepository.GetCompanyByUserId(userId);

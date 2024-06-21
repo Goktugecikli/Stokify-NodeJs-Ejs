@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
         var username = document.getElementById('username').value;
         var password = document.getElementById('password').value;
         
-        const response = await fetch('/auth', {
+        const response = await fetch('/api/user/auth', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        const response = await fetch('/register', {
+        const response = await fetch('/api/user/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -109,10 +109,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     })
 });
-
-
-
-
 
 
 

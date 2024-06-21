@@ -9,8 +9,6 @@ import UserService from "./UserService.js";
 import ProductService from "./ProductService.js";
 import CompanyService from "./CompanyService.js";
 
-
-
 const FileStore = FileStoreFactory(session);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -53,7 +51,6 @@ function requireAuth(req, res, next) {
   next();
 }
 
-
 //------------------------------------------
 
 app.set("view engine", "ejs");
@@ -62,6 +59,8 @@ app.set("views", path.join(__dirname, "views"));
 // Statik dosyalar için klasörü ayarlayın
 app.use(express.static(path.join(__dirname, "public")));
 
+
+//#region  Pages Rotates
 
 app.get("/login", checkAuth, (req, res) => {
   res.render("login"); // Ensure you have a login.ejs view
@@ -83,7 +82,6 @@ app.get("/logout", (req, res) => {
   });
 });
 
-// Diğer sayfalar için rotalar
 app.get("/home", requireAuth, async (req, res) => {
   try {
     const username = req.session.user;
@@ -99,9 +97,11 @@ app.get("/home", requireAuth, async (req, res) => {
   }
   // res.render('pages/home')
 });
+
 app.get("/register-company", requireAuth, async (req, res) => {
   res.render("pages/register-company");
 });
+
 app.get("/user-profile", requireAuth, async (req, res) => {
   try {
     const userName = req.session.user;
@@ -119,38 +119,47 @@ app.get("/user-profile", requireAuth, async (req, res) => {
     res.status(500).send("Error fetching user data");
   }
 });
+
 app.get("/stock-operations", requireAuth, (req, res) =>
   res.render("pages/stock-operations")
 );
+
 app.get("/reports", requireAuth, (req, res) => res.render("pages/reports"));
+
 app.get("/stock", requireAuth, (req, res) => res.render("pages/stock"));
+
 app.get("/approvals", requireAuth, (req, res) => res.render("pages/approvals"));
+//#endregion ------------------------------------------------------------------------------------------------- //
 
 
-// APILER //
-// app.get('/logout', (req, res) => {
-//     req.session.destroy();
-//     res.redirect('/login');
-// });
-app.post("/auth", async (req, res) => {
+//#region  ---------------------------------------- APIs ----------------------------------------------------- //
+app.post("/api/user/auth", async (req, res) => {
   const { username, password } = req.body;
 
   var userService = new UserService();
   const isValidUser = await userService.validateUser(username, password);
-  if (isValidUser > 0) {
+  if (isValidUser || isValidUser.length > 0) {
+
+    let companyInfoResult = await userService.GetCompanyByUserId(isValidUser[0].UserId);
+
     req.session.user = username;
+    req.session.userId = isValidUser[0].UserId;
     req.session.authorized = true;
+    req.session.userCompanyId = companyInfoResult[0].CompanyId ?? -1;
+    req.session.companyOwnerUserId = companyInfoResult[0].CompanyOwnerUserId ?? -1;
+
+
+    
+    console.log(JSON.stringify(req.session));
     res.json({ success: true, redirectUrl: "/home" });
   } else {
-    res.json({ success: false, message: "Bilgiler yanlış" });
+    res.json({ success: false, message: "Kullanıcı adı veya şifre yanlış." });
   }
 });
 
-app.post("/register", async (req, res) => {
+app.post("/api/user/register", async (req, res) => {
   // console.log(JSON.stringify(req.body));
   const { firstName, lastName, email, username, password } = req.body;
-  var userService = new UserService();
-
   const isExistUser = await userService.IsExistUser(username);
   // console.log(isExistUser);
   if (isExistUser != null && isExistUser.length > 0) {
@@ -182,13 +191,21 @@ app.post("/api/product/add-product", async (req, resp) => {
   let userName = req.session.user;
   let userCompanyResult = await userService.GetCompanyByUserName(userName);
   console.log(`${JSON.stringify(userCompanyResult)}`);
-  if(!userCompanyResult || userCompanyResult.length === 0){
+  if (!userCompanyResult || userCompanyResult.length === 0) {
     console.log("Girdi");
-    resp.json({success:false, message:"Herhangi bir şirkete kayıtlı değilsiniz. Kullanıcı profil sayfasından bir şirkete katılabilir ya da şirketinizi kayıt edebilirsiniz"});
+    resp.json({
+      success: false,
+      message:
+        "Herhangi bir şirkete kayıtlı değilsiniz. Kullanıcı profil sayfasından bir şirkete katılabilir ya da şirketinizi kayıt edebilirsiniz",
+    });
     return;
   }
   console.log("Devam etti");
-  let result = await productService.AddProduct(req.body,userName, userCompanyResult[0].CompanyId);
+  let result = await productService.AddProduct(
+    req.body,
+    userName,
+    userCompanyResult[0].CompanyId
+  );
   resp.json(JSON.stringify(result));
 });
 app.post("/api/user/join-company-by-company-id", async (req, resp) => {
@@ -202,8 +219,21 @@ app.post("/api/company/register", async (req, resp) => {
   let companyName = req.body.companyName;
   let userName = req.session.user;
   var result = await companyService.Register(companyName, userName);
+  if (result.success === true) {
+    req.session.companyId = result.companyId;
+    console.log(JSON.stringify(req.session));
+  }
   resp.json(result);
 });
+
+app.get("/api/company/get-invite-code", async (req, resp) => {
+  let userName = req.session.user;
+  let result = await companyService.GetCompanyInviteCodeByUserName(userName);
+  resp.json(result);
+});
+
+//#endregion  --------------------------------------- APILER -------------------------------------------------- //
+
 // Sunucuyu başlatın
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

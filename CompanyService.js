@@ -46,7 +46,12 @@ class CompanyService {
         return { success: false, message: "Şirket kaydı başarısız. 2" };
       }
 
-      return { success: true, redirectUrl: "/home" };
+      var companyIdResult = await this.companyRepository.CompanyIdentifierById(registerResult[0].Id);
+      if(!companyIdResult ||companyIdResult.length === 0){
+        return { success: false, message: "Şirket kaydı başarısız. 3" };  
+        }
+
+      return { success: true, redirectUrl: "/home", companyId: companyIdResult[0].CompanyId };
     } catch (err) {
       console.error("Error copmany register", err);
     }
@@ -69,6 +74,15 @@ class CompanyService {
       console.error("Error copmany find", err);
     }
   }
+  async GetCompanyInviteCodeByUserName(userName){
+    try{
+      // let userIsOwner = 
+    }catch(err){
+      console.log("Hata meydana geldi. Hata: ", err);
+    }
+    
+  }
+
   async GetCompanyDetailsByInvateCode(invateCode) {
     try {
       return await this.companyRepository.GetCompanyDetailsByInvateCode(
