@@ -60,7 +60,6 @@ async function handleFormSubmit(event) {
   if (!validate) {
     return;
   }
-  console.log(quantity);
   if (document.getElementById("quantity").value <= 0) {
     Swal.fire({
       icon: "error",
@@ -89,16 +88,16 @@ async function handleFormSubmit(event) {
     },
     body: JSON.stringify(jsonObject),
   });
-  if (!response.ok) {
-    throw new Error("HTTP error " + response.status);
-  }
+  // if (!response.ok) {
+  //   throw new Error("HTTP error " + response.status);
+  // }
   let responseJSON = await response.json();
-  let resultResponse = JSON.parse(responseJSON);
-  if (resultResponse.success === false) {
+  // let resultResponse = JSON.parse(responseJSON);
+  if (responseJSON.success === false) {
     Swal.fire({
       icon: "error",
       title: "Hata!",
-      text: resultResponse.message,
+      text: responseJSON.message,
       confirmButtonText: "Girişe Yönlendir",
       allowOutsideClick: false, // Dışarı tıklamayı kapat
       allowEscapeKey: false, // ESC tuşunu kapat
@@ -112,7 +111,7 @@ async function handleFormSubmit(event) {
   Swal.fire({
     icon: "success",
     title: "Başarılı!",
-    text: resultResponse.message,
+    text: responseJSON.message,
     confirmButtonText: "Tamam",
     allowOutsideClick: false, // Dışarı tıklamayı kapat
     allowEscapeKey: false, // ESC tuşunu kapat
@@ -148,7 +147,6 @@ async function fetchIslemTurleri() {
 
     const DdOperationTypes = document.getElementById("operationType");
     DdOperationTypes.innerHTML = '<option value="">Seçiniz</option>';
-    console.log(`${JSON.stringify(operationTypes)}`);
     operationTypes.forEach((type) => {
       const option = document.createElement("option");
       option.value = type.ID;

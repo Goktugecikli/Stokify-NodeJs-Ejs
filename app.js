@@ -35,7 +35,7 @@ app.use(
 );
 
 
-//#endregion
+//#region File path set
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -43,20 +43,17 @@ app.set("views", path.join(__dirname, "views"));
 // Statik dosyalar için klasörü ayarlayın
 app.use(express.static(path.join(__dirname, "public")));
 
-
-
-//#region Middleware Func
+//#endregion
 
 function checkAuth(req, res, next) {
-  if (req.session.user) {
-    //  console.log(req.session.user)
+  if (req.session.userName) {
     return res.redirect("/home");
   }
   next();
 }
 
 function requireAuth(req, res, next) {
-  if (!req.session.user) {
+  if (!req.session.userName) {
     return res.redirect("/login");
   }
   next();
@@ -73,7 +70,6 @@ app.get("/", checkAuth, (req, res) => {
 });
 
 app.get("/logout", (req, res) => {
-  //console.log(req.session.user);
   req.session.destroy((err) => {
     if (err) {
       return res.status(500).send("Could not log out.");
@@ -86,8 +82,7 @@ app.get("/logout", (req, res) => {
 
 app.get("/home", requireAuth, async (req, res) => {
   try {
-    const username = req.session.user;
-    console.log(req.session.user);
+    const username = req.session.userName;
     let user = await userService.IsExistUser(username);
     if (!user) {
       return res.status(404).send("User not found");
@@ -106,8 +101,7 @@ app.get("/register-company", requireAuth, async (req, res) => {
 
 app.get("/user-profile", requireAuth, async (req, res) => {
   try {
-    const userName = req.session.user;
-    // console.log(req.session.user);
+    const userName = req.session.userName;
     let user = await userService.IsExistUser(userName);
     if (!user) {
       return res.status(404).send("User not found");
@@ -148,7 +142,7 @@ app.post("/api/user/auth", async (req, res) => {
       userCompanyId = companyInfoResult[0].CompanyId;
       companyInfoResult = companyInfoResult[0].CompanyOwnerUserId;
     }
-    req.session.user = username;
+    req.session.userName = username;
     req.session.userId = isValidUser[0].UserId;
     req.session.authorized = true;
     req.session.userCompanyId = userCompanyId;
@@ -193,8 +187,9 @@ app.get("/api/product/get-all-operation-types", async (req, res) => {
 app.post("/api/product/add-product", async (req, resp) => {
   let userId = req.session.userId;
   let userCompanyId = req.session.userCompanyId;
+  console.log(userCompanyId);
   if(userCompanyId == null || userCompanyId === -1){
-    resp.status(400).json({success: false,message:"Herhangi bir şirkete kayıtlı değilsiniz. Kullanıcı profil sayfasından bir şirkete katılabilir ya da şirketinizi kayıt edebilirsiniz"});
+    resp.json({success: false,message:"Herhangi bir şirkete kayıtlı değilsiniz. Kullanıcı profil sayfasından bir şirkete katılabilir ya da şirketinizi kayıt edebilirsiniz"});
     return;
   }
   let result = await productService.AddProduct(
@@ -218,12 +213,13 @@ app.post("/api/user/join-company-by-company-id", async (req, resp) => {
 });
 app.post("/api/company/register", async (req, resp) => {
   let companyName = req.body.companyName;
-  let userName = req.session.user;
   let userId = req.session.userId;
   var result = await companyService.Register(companyName, userId);
   console.log(JSON.stringify(result));
   if (result.success === true) {
-    req.session.companyId = result.companyId;
+    req.session.userCompanyId = result.companyId;
+    req.session.companyOwnerUserId = result.companyOwnerUserId;
+
     console.log(JSON.stringify(req.session));
   }
   resp.json(result);
@@ -232,12 +228,10 @@ app.post("/api/company/register", async (req, resp) => {
 app.get("/api/company/get-invite-code", async (req, resp) => {
   let userId = req.session.userId;
   let companyOwnerUserId = req.session.companyOwnerUserId;
-  console.log(`${userId}, ${companyOwnerUserId}`);
   if(userId !== companyOwnerUserId){
     resp.json({success:false, message:"Katılım kodlarını sadece Şirket sahipleri alabilir.\nLütfen Şirket Sahibi ile iletişime geçiniz."});
   }
   let result = await companyService.GetCompanyInviteCodeByUserId(userId);
-  console.log(JSON.stringify(result));
   resp.status(200).json(result);
 });
 
