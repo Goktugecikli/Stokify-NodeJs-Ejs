@@ -16,6 +16,18 @@ class UserRepository {
       await this.dbManager.closeDB();
     }
   }
+  async GetUserDetailsByUserIs(userId) {
+    try {
+      await this.dbManager.connectDB();
+      let params = { userName: userName };
+      let query = "Select * from CompanyUsers where UserId = (select UserId from Users where Username=@userName)";
+      return await this.dbManager.queryWithResult(query, params);
+    } catch (err) {
+      console.error("Error retrieving user details:", err);
+    } finally {
+      await this.dbManager.closeDB();
+    }
+  }
   async GetUserDetailsByUserName(userName) {
     try {
       await this.dbManager.connectDB();

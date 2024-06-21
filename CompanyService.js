@@ -26,37 +26,56 @@ class CompanyService {
       console.log("Company Product is exists err");
     }
   }
-  async Register(companyName, userName) {
+  async Register(companyName, userId) {
     try {
-      let invateCode = this.#generateRandomString();
+      //#region Kullanıcı daha önce şirket kaydetmiş mi kontrol et
+      let isUserOwnerResultArr = await this.companyRepository.GetUserCreatedCompanyByUserId(userId);
+      if (isUserOwnerResultArr.length > 0) {
+        console.log("Test: "+JSON.stringify(isUserOwnerResultArr));
+        return {
+          success: false,
+          message: "Daha önce bir şirket kaydı yaptırmışsınız. Lütfen yeni bir kayıt için yetkili ile iletişime geçiniz.",
+        };
+      }
+      //#endregion
+
+      //#region Katılım Numarası Oluştur
+      let inviteCode = this.#generateRandomString();
       let registerResult = await this.companyRepository.Register(
         companyName,
-        userName,
-        invateCode
+        userId,
+        inviteCode
       );
       if (!registerResult || registerResult.length === 0) {
         return { success: false, message: "Şirket kaydı başarısız." };
       }
+      //#endregion
       let userService = new UserService();
-      let joinResult = userService.JoinCompanyByInvateCode(
-        invateCode,
-        userName
+      
+      //#region Şirkete çalışan olarak kayıt et
+      let joinResult = userService.JoinCompanyByInviteCode(
+        inviteCode,
+        userId
       );
       if (!joinResult || joinResult.length === 0) {
         return { success: false, message: "Şirket kaydı başarısız. 2" };
       }
-
-      var companyIdResult = await this.companyRepository.CompanyIdentifierById(
+      //#endregion 
+      
+      //#region Kurulan şirket bilgilerini al
+      var companyIdResult = await this.companyRepository.CompanyDetailsById(
         registerResult[0].Id
       );
       if (!companyIdResult || companyIdResult.length === 0) {
         return { success: false, message: "Şirket kaydı başarısız. 3" };
       }
-
+      //#endregion
+      
       return {
         success: true,
         redirectUrl: "/home",
         companyId: companyIdResult[0].CompanyId,
+        companyOwnerUserId: companyIdResult[0].CompanyOwnerUserId
       };
     } catch (err) {
       console.error("Error copmany register", err);

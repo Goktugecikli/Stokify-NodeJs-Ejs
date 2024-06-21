@@ -30,6 +30,7 @@ async function handleFormSubmit(event) {
 
     if (result.success === false) {
       alert(result.message);
+      return;
     }
 
     alert(

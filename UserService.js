@@ -27,20 +27,16 @@ class UserService {
     }
   }
 
-  async JoinCompanyByInvateCode(invateCode, userName) {
+  async JoinCompanyByInviteCode(inviteCode, userId) {
     try {
       let companyDetailsResult =
-        await this.companyService.GetCompanyDetailsByInvateCode(invateCode);
+        await this.companyService.GetCompanyDetailsByInvateCode(inviteCode);
       if (!companyDetailsResult || companyDetailsResult.length === 0) {
         return { success: false, message: "Wrong InvateCode" };
       }
-      let userDetailsResult = await this.GetUserDetailsByUserName(userName);
-      if (!userDetailsResult || userDetailsResult.length === 0) {
-        return { success: false, message: "Error Get UserDetails" };
-      }
       let joinResult =
         await this.userRepository.JoinCompanyByUserIdAndCompanyId(
-          userDetailsResult[0].UserId,
+          userId,
           companyDetailsResult[0].CompanyId
         );
       if (!joinResult || joinResult.length === 0) {
@@ -49,7 +45,11 @@ class UserService {
       return ({success:true})
     } catch (err) {}
   }
-
+  async GetUserDetailsByUserIs(userId) {
+    try {
+      return this.userRepository.GetUserDetailsByUserIs(userId);
+    } catch (err) {}
+  }
   async GetUserDetailsByUserName(userName) {
     try {
       return this.userRepository.GetUserDetailsByUserName(userName);

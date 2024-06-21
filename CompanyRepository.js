@@ -5,11 +5,11 @@ class CompanyRepository {
     this.dbManager = new DbManager(dbConfig);
   }
 
-  async CompanyIdentifierById(id){
+  async CompanyDetailsById(id){
     try {
       await this.dbManager.connectDB(); // Veritabanına bağlan
       let params = { id: id };
-      let query = "Select CompanyId from Companies where Id=@id";
+      let query = "Select * from Companies where Id=@id";
       return await this.dbManager.queryWithResult(query, params);
     } catch (err) {
       // console.error("Error repossitory connection. Error ", err);
@@ -18,16 +18,16 @@ class CompanyRepository {
     }
   }
 
-  async Register(companyName, userName, invateCode) {
+  async Register(companyName, userId, inviteCode) {
     try {
       await this.dbManager.connectDB(); // Veritabanına bağlan
       let params = {
         companyName: companyName,
-        userName: userName,
-        invateCode: invateCode,
+        userId: userId,
+        inviteCode: inviteCode,
       };
       let query =
-        " INSERT INTO Companies (Name, CompanyOwnerUserId, InvateCode, CreatedAt) VALUES (@companyName, (select UserId from users where Username=@userName), @invateCode, getDate());SELECT SCOPE_IDENTITY() AS Id;";
+        "INSERT INTO Companies (Name, CompanyOwnerUserId, InviteCode, CreatedAt) VALUES (@companyName, @userId, @inviteCode, getDate());SELECT SCOPE_IDENTITY() AS Id;";
       return await this.dbManager.queryWithResult(query, params);
     } catch (err) {
       // console.error("Error repossitory connection. Error ", err);
@@ -89,8 +89,8 @@ class CompanyRepository {
   async GetCompanyDetailsByInvateCode(invateCode) {
     try {
       await this.dbManager.connectDB(); // Veritaban1ına bağlan
-      let params = { invateCode: invateCode };
-      let query = "SELECT * from Companies where InvateCode = @invateCode";
+      let params = { inviteCode: invateCode };
+      let query = "SELECT * from Companies where InviteCode = @inviteCode";
       return await this.dbManager.queryWithResult(query, params);
     } catch (err) {
       // console.error("Error repossitory connection. Error ", err);

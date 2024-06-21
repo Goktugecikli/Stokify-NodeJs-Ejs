@@ -208,14 +208,16 @@ app.post("/api/product/add-product", async (req, resp) => {
 app.post("/api/user/join-company-by-company-id", async (req, resp) => {
   console.log(`Gelen Body: ${JSON.stringify(req.body)}`);
   let invateCode = req.body.inviteCode;
-  const userName = req.session.user;
-  var result = await userService.JoinCompanyByInvateCode(invateCode, userName);
+  const userId = req.session.userId;
+  var result = await userService.JoinCompanyByInviteCode(invateCode, userId);
   resp.json(JSON.stringify(result));
 });
 app.post("/api/company/register", async (req, resp) => {
   let companyName = req.body.companyName;
   let userName = req.session.user;
-  var result = await companyService.Register(companyName, userName);
+  let userId = req.session.userId;
+  var result = await companyService.Register(companyName, userId);
+  console.log(JSON.stringify(result));
   if (result.success === true) {
     req.session.companyId = result.companyId;
     console.log(JSON.stringify(req.session));
