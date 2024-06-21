@@ -60,6 +60,7 @@ class ProductService {
 
         if (product.length === 0 || !(await companyService.IsCompanyHasProduct(product[0].ProductId, userCompanyId))) {
             // Ürün yoksa veya şirketin bu ürüne sahip olmadığı durum
+            console.log("test Ürün yok ");
             resultToAdd = await this.productRepository.CreateProduct(productToAdd, userName);
             if (!resultToAdd || resultToAdd.length === 0) {
                 return { success: false, message: "Error occurred while adding the product." };
@@ -72,7 +73,7 @@ class ProductService {
                 return { success: false, message: "Failed to register in company." };
             }
         } else {
-            // Ürün varsa
+            
             let currentQuantityOfProduct = await this.productRepository.GetQuantityByProductId(product[0].Id);
             currentQuantityOfProduct = currentQuantityOfProduct[0].quantity;
 

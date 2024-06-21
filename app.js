@@ -195,7 +195,6 @@ app.post("/api/product/add-product", async (req, resp) => {
     resp.status(400).json({success: false,message:"Herhangi bir şirkete kayıtlı değilsiniz. Kullanıcı profil sayfasından bir şirkete katılabilir ya da şirketinizi kayıt edebilirsiniz"});
     return;
   }
-  console.log("Devam etti");
   let result = await productService.AddProduct(
     req.body,
     userName,
@@ -208,6 +207,10 @@ app.post("/api/user/join-company-by-company-id", async (req, resp) => {
   let invateCode = req.body.inviteCode;
   const userId = req.session.userId;
   var result = await userService.JoinCompanyByInviteCode(invateCode, userId);
+  if(result.success === true){
+    req.session.userCompanyId = result.userCompanyId;
+    req.session.companyOwnerUserId = result.companyOwnerUserId;
+  }
   resp.json(JSON.stringify(result));
 });
 app.post("/api/company/register", async (req, resp) => {

@@ -42,7 +42,7 @@ class UserService {
       if (!joinResult || joinResult.length === 0) {
         return { success: false, message: "Error Join Company" };
       }
-      return ({success:true})
+      return ({success:true, userCompanyId:companyDetailsResult[0].CompanyId, companyOwnerUserId:companyDetailsResult[0].CompanyOwnerUserId})
     } catch (err) {}
   }
   async GetUserDetailsByUserIs(userId) {
