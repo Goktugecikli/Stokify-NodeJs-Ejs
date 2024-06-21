@@ -181,10 +181,13 @@ app.get("/api/product/get-all-operation-types", async (req, res) => {
 app.post("/api/product/add-product", async (req, resp) => {
   let userName = req.session.user;
   let userCompanyResult = await userService.GetCompanyByUserName(userName);
+  console.log(`${JSON.stringify(userCompanyResult)}`);
   if(!userCompanyResult || userCompanyResult.length === 0){
+    console.log("Girdi");
     resp.json({success:false, message:"Herhangi bir şirkete kayıtlı değilsiniz. Kullanıcı profil sayfasından bir şirkete katılabilir ya da şirketinizi kayıt edebilirsiniz"});
+    return;
   }
-
+  console.log("Devam etti");
   let result = await productService.AddProduct(req.body,userName, userCompanyResult[0].CompanyId);
   resp.json(JSON.stringify(result));
 });

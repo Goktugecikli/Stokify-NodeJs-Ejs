@@ -52,7 +52,7 @@ class ProductService {
       );
     }
   }
-  async AddProduct(productToAdd, userName) {
+  async AddProduct(productToAdd, userName,userCompanyId) {
     try {
         let companyService = new CompanyService();
         let product = await this.ProductIsExists(productToAdd);
@@ -64,9 +64,10 @@ class ProductService {
             if (!resultToAdd || resultToAdd.length === 0) {
                 return { success: false, message: "Error occurred while adding the product." };
             }
+            console.log(`${JSON.stringify(resultToAdd)}`);
             id = resultToAdd[0].Id;
-
-            resultToCompany = companyService.AddProductToCompanyByUserNameAndProduct_id(resultToAdd[0].AddedProductId, userName);
+            
+            resultToCompany = companyService.AddProductToCompanyByUserNameAndProduct_id(id, userName);
             if (!resultToCompany || resultToCompany.length === 0) {
                 return { success: false, message: "Failed to register in company." };
             }

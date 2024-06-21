@@ -11,7 +11,7 @@
 <body id="body">
     <%- include('../partials/sidebar') %>
     <div class="page_container">
-        <h1 class="detail">User Profile Page</h1>
+        <h1 class="detail">Kullanıcı Profil Sayfası</h1>
         <br>
         <div class="company__info">
             <!-- <div class="company__title">
@@ -26,7 +26,7 @@
                                     <img src="/company_pp.jpg" class="company__pp" alt="">
                                 </div> -->
                                 <div class="company__name">
-                                    <h1 style="color: rgb(151, 9, 9); ">Company Name</h1>
+                                    <h1 style="color: rgb(151, 9, 9); ">Şirket İsmi</h1>
                                     <hr>
                                     <div class="">
                                         <p class="user_details_value"><%= companyData.Name %></p>
@@ -38,14 +38,14 @@
                     <% } else { %>
                         <div class="no-company-info">
                             <hr>
-                            <p>Company information is not available.</p>
+                            <p>Herhangi bir şirkete kayıtlı değilsiniz</p>
                             <hr>
                             <div class="button-container">
                                 <div class="button-wrapper">
-                                    <button class="button button-green" id="registerCompany">Register Your Company</button>
+                                    <button class="button button-green" id="registerCompany">Şirketinizi Kaydedin</button>
                                 </div>
                                 <div class="button-wrapper">
-                                    <button class="button button-blue" id="joinButton">Join Compnay</button>
+                                    <button class="button button-blue" id="joinButton">Şirkete katılın</button>
                                 </div>
                             </div>
                         </div>
@@ -54,11 +54,11 @@
             </div>
         </div>
         <div class="company__details">
-            <h1 style="">User Info</h1>
+            <h1 style="">Kullanıcı Bilgileri</h1>
             <br>
     
             <div class="detail">
-                <h2 class="user_details_label">Name Surname:</h2>
+                <h2 class="user_details_label">İsim</h2>
                 <span class="user_details_value"><%= user.Firstname %> <%= user.LastName %></span>
             </div>
             <div class="detail">
@@ -66,14 +66,14 @@
                 <p class="user_details_value"><%= user.Email %></p>
             </div>
             <div class="detail">
-                <h2 class="user_details_label">Username:</h2>
+                <h2 class="user_details_label">Kullanıcı Adı:</h2>
                 <span class="user_details_value"><%= user.Username %></span>
             </div>
             <div class="detail">
-                <h2 class="user_details_label">Password:</h2>
+                <h2 class="user_details_label">Şifre:</h2>
                 <div class="password-container">
                     <input type="password" id="userPassword" class="user_details_value password-input" value="<%= user.Password %>" readonly>
-                    <button class="toggle-password" onclick="togglePassword()">Show</button>
+                    <button class="toggle-password" onclick="togglePassword()">Şifreyi Göster</button>
                 </div>
             </div>
         </div>

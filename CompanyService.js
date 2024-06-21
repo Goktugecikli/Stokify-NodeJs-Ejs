@@ -60,6 +60,7 @@ class CompanyService {
   }
   async AddProductToCompanyByUserNameAndProduct_id(product_id, userName) {
     try {
+      console.log(product_id, userName);
       return await this.companyRepository.AddProductToCompanyByUserNameAndProduct_id(
         product_id,
         userName
