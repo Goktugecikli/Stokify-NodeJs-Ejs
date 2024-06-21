@@ -1,4 +1,5 @@
 // import { json } from "body-parser";
+import CompanyService from "./CompanyService.js";
 import ProductRepository from "./ProductRepository.js";
 
 class ProductService {
@@ -37,81 +38,74 @@ class ProductService {
       );
     }
   }
-    async AddProduct(productToAdd, userName) {
-      try {
-        // Check if product exists
-        let product = await this.ProductIsExists(productToAdd);
-        let id, currentQuantityOfProduct = 0;
-    
-        if (product.length === 0) {
-          // Product does not exist, add it
-          let resultToAdd = await this.productRepository.AddProduct(productToAdd,userName);
-          if (!resultToAdd || resultToAdd.length === 0 || !resultToAdd[0].AddedProductId) {
-           console.log(JSON.stringify(success));
-            return {
-              success: false,
-              message: "Error occurred while adding the product.",
-            };
-          }
-          id = resultToAdd[0].Id;
-          currentQuantityOfProduct = await this.productRepository.GetQuantityByProductId(resultToAdd[0].AddedProductId);
-        } else {
-          // Product exists, retrieve its ID and current quantity
-          id = product[0].Id;
-          currentQuantityOfProduct = await this.productRepository.GetQuantityByProductId(product[0].Id);
-        }
-    
-        currentQuantityOfProduct = currentQuantityOfProduct[0].quantity;
-    
-        // Determine operation type (increase or decrease)
-        let operationType = await this.productRepository.GetOperationTypeById(productToAdd.operationType);
-        if (!operationType || operationType.length === 0) {
-          return {
-            success: false,
-            message: `Operation type ${productToAdd.operationType} not found.`,
-          };
-        }
-    
-        // Parse quantity to add
-        let quantityToAdd = parseInt(productToAdd.quantity);
-        if (isNaN(quantityToAdd)) {
-          return {
-            success: false,
-            message: `Invalid quantity: ${productToAdd.quantity}`,
-          };
-        }
-    
-        // Adjust quantity based on operation type
-        let resultQuantity = operationType[0].IsIncrease ? 
-                            currentQuantityOfProduct + quantityToAdd :
-                            currentQuantityOfProduct - quantityToAdd;
-    
-        if (resultQuantity < 0 && !operationType[0].IsIncrease) {
-          return {
-            success: false,
-            message: `Insufficient stock. Current quantity: ${currentQuantityOfProduct}`,
-          };
-        }
-    
-        // Update quantity in the database
-        let result = await this.productRepository.SetQuantity(resultQuantity, id);
-        if (result[0] === 0) {
-          return {
-            success: false,
-            message: "Error occurred while updating quantity.",
-          };
-        }
-        
-        return { success: true};
-      } catch (err) {
-        console.log("Error adding product at ProductService:", err);
-        return {
-          success: false,
-          message: "Error occurred while adding the product.",
-        };
-      }
+
+  async IsCompanyHasProduct(product, companyId) {
+    try {
+      return await this.productRepository.IsCompanyHasProduct(
+        product,
+        companyId
+      );
+    } catch (err) {
+      console.log(
+        "There is an error while getting ProductOperationTypes at ProductService. Error",
+        err
+      );
     }
-    
   }
+  async AddProduct(productToAdd, userName) {
+    try {
+        let companyService = new CompanyService();
+        let product = await this.ProductIsExists(productToAdd);
+        let id, resultToAdd, resultToCompany;
+
+        if (product.length === 0 || !(await companyService.IsCompanyHasProduct(product[0].ProductId, userCompanyId))) {
+            // Ürün yoksa veya şirketin bu ürüne sahip olmadığı durum
+            resultToAdd = await this.productRepository.CreateProduct(productToAdd, userName);
+            if (!resultToAdd || resultToAdd.length === 0) {
+                return { success: false, message: "Error occurred while adding the product." };
+            }
+            id = resultToAdd[0].Id;
+
+            resultToCompany = companyService.AddProductToCompanyByUserNameAndProduct_id(resultToAdd[0].AddedProductId, userName);
+            if (!resultToCompany || resultToCompany.length === 0) {
+                return { success: false, message: "Failed to register in company." };
+            }
+        } else {
+            // Ürün varsa
+            let currentQuantityOfProduct = await this.productRepository.GetQuantityByProductId(product[0].Id);
+            currentQuantityOfProduct = currentQuantityOfProduct[0].quantity;
+
+            let operationType = await this.productRepository.GetOperationTypeById(productToAdd.operationType);
+            if (!operationType || operationType.length === 0) {
+                return { success: false, message: `Operation type ${productToAdd.operationType} not found.` };
+            }
+
+            let quantityToAdd = parseInt(productToAdd.quantity);
+            if (isNaN(quantityToAdd)) {
+                return { success: false, message: `Invalid quantity: ${productToAdd.quantity}` };
+            }
+
+            let resultQuantity = operationType[0].IsIncrease
+                ? currentQuantityOfProduct + quantityToAdd
+                : currentQuantityOfProduct - quantityToAdd;
+
+            if (resultQuantity < 0 && !operationType[0].IsIncrease) {
+                return { success: false, message: `Insufficient stock. Current quantity: ${currentQuantityOfProduct}` };
+            }
+
+            let result = await this.productRepository.SetQuantity(resultQuantity, product[0].Id);
+            if (result[0] === 0) {
+                return { success: false, message: "Error occurred while updating quantity." };
+            }
+        }
+
+        return { success: true, message: "Product added successfully." };
+    } catch (err) {
+        console.log("Error adding product at ProductService:", err);
+        return { success: false, message: "Error occurred while adding the product." };
+    }
+}
+
+}
 
 export default ProductService;

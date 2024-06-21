@@ -1,4 +1,5 @@
 import CompanyRepository from "./CompanyRepository.js";
+import UserRepository from "./UserRepository.js";
 import UserService from "./UserService.js";
 class CompanyService {
   constructor() {
@@ -18,7 +19,13 @@ class CompanyService {
 
     return result;
   }
-
+  async IsCompanyHasProduct(productId, userName) {
+    try {
+      return await UserRepository.IsCompanyHasProduct(productId, userName);
+    } catch (err) {
+      console.log("Company Product is exists err");
+    }
+  }
   async Register(companyName, userName) {
     try {
       let invateCode = this.#generateRandomString();
@@ -39,7 +46,7 @@ class CompanyService {
         return { success: false, message: "Şirket kaydı başarısız. 2" };
       }
 
-      return { success: true, redirectUrl:"/home" };
+      return { success: true, redirectUrl: "/home" };
     } catch (err) {
       console.error("Error copmany register", err);
     }
@@ -51,7 +58,16 @@ class CompanyService {
       console.error("Error copmany find", err);
     }
   }
-  async JoinCompanyById(companyId, userName) {}
+  async AddProductToCompanyByUserNameAndProduct_id(product_id, userName) {
+    try {
+      return await this.companyRepository.AddProductToCompanyByUserNameAndProduct_id(
+        product_id,
+        userName
+      );
+    } catch (err) {
+      console.error("Error copmany find", err);
+    }
+  }
   async GetCompanyDetailsByInvateCode(invateCode) {
     try {
       return await this.companyRepository.GetCompanyDetailsByInvateCode(

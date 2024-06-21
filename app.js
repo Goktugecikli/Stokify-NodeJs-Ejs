@@ -182,11 +182,10 @@ app.post("/api/product/add-product", async (req, resp) => {
   let userName = req.session.user;
   let userCompanyResult = await userService.GetCompanyByUserName(userName);
   if(!userCompanyResult || userCompanyResult.length === 0){
-    console.log("SKY");
     resp.json({success:false, message:"Herhangi bir şirkete kayıtlı değilsiniz. Kullanıcı profil sayfasından bir şirkete katılabilir ya da şirketinizi kayıt edebilirsiniz"});
   }
 
-  let result = await productService.AddProduct(req.body,userName);
+  let result = await productService.AddProduct(req.body,userName, userCompanyResult[0].CompanyId);
   resp.json(JSON.stringify(result));
 });
 app.post("/api/user/join-company-by-company-id", async (req, resp) => {
