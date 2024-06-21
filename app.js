@@ -122,19 +122,19 @@ app.get("/reports", requireAuth, (req, res) => res.render("pages/reports"));
 app.get("/stock", requireAuth, (req, res) => res.render("pages/stock"));
 app.get("/approvals", requireAuth, (req, res) => res.render("pages/approvals"));
 
-// APILER //
-// app.get('/logout', (req, res) => {
-//     req.session.destroy();
-//     res.redirect('/login');
-// });
-app.post("/auth", async (req, res) => {
+
+app.post("/api/user/auth", async (req, res) => {
   const { username, password } = req.body;
 
   var userService = new UserService();
   const isValidUser = await userService.validateUser(username, password);
-  if (isValidUser > 0) {
+  if (isValidUser || isValidUser.length > 0) {
+    console.log(JSON.stringify(isValidUser));
     req.session.user = username;
+    req.session.userId = isValidUser[0].UserId;
     req.session.authorized = true;
+
+    console.log(JSON.stringify(req.session));
     res.json({ success: true, redirectUrl: "/home" });
   } else {
     res.json({ success: false, message: "Kullanıcı adı veya şifre yanlış." });

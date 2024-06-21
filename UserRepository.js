@@ -46,9 +46,9 @@ class UserRepository {
     try {
       await this.dbManager.connectDB();
       let params = { username: username, password: password };
-      let query = "SELECT COUNT(*) AS count FROM Users WHERE Username = @username AND Password = @password";
+      let query = "SELECT * FROM Users WHERE Username = @username AND Password = @password";
       let result = await this.dbManager.queryWithResult(query, params);
-      return result[0].count;
+      return result;
     } catch (err) {
       console.error("Error retrieving user by name and password:", err);
     } finally {
