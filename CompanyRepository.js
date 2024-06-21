@@ -9,7 +9,7 @@ class CompanyRepository {
       await this.dbManager.connectDB(); // Veritabanına bağlan
       let params = { companyName: companyName, userName: userName, invateCode:invateCode };
       let query =
-        " INSERT INTO Companies (Name, CompanyOwnerUserId, InvateCode) VALUES (@companyName, (select UserId from users where Username=@userName), @invateCode);SELECT SCOPE_IDENTITY() AS Id;";
+        " INSERT INTO Companies (Name, CompanyOwnerUserId, InvateCode, CreatedAt) VALUES (@companyName, (select UserId from users where Username=@userName), @invateCode, getDate());SELECT SCOPE_IDENTITY() AS Id;";
       return await this.dbManager.queryWithResult(query, params);
     } catch (err) {
       // console.error("Error repossitory connection. Error ", err);
@@ -24,7 +24,6 @@ class CompanyRepository {
       let query =
         "SELECT * from Companies where CompanyId =  CONVERT(uniqueidentifier,@companyId)";
       return await this.dbManager.queryWithResult(query, params);
-      return result;
     } catch (err) {
       // console.error("Error repossitory connection. Error ", err);
     } finally {

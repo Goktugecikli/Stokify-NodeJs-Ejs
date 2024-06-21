@@ -55,7 +55,20 @@ class UserService {
       return this.userRepository.GetUserDetailsByUserName(userName);
     } catch (err) {}
   }
-
+  async GetCompanyByUserName(userName) {
+    try {
+      var result = await this.userRepository.GetCompanyByUserName(userName);
+      if (!result || result.length === 0) {
+        return null;
+      }
+      var companyDetails = await this.companyService.GetCompanyDetailsById(
+        result[0].CompanyId
+      );
+      return companyDetails;
+    } catch (err) {
+      console.error("Error copmany find", err);
+    }
+  }
   async GetCompanyByUserId(userId) {
     try {
       var result = await this.userRepository.GetCompanyByUserId(userId);
