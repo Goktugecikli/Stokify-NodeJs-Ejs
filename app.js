@@ -53,6 +53,16 @@ function requireAuth(req, res, next) {
   next();
 }
 
+
+//------------------------------------------
+
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+
+// Statik dosyalar için klasörü ayarlayın
+app.use(express.static(path.join(__dirname, "public")));
+
+
 app.get("/login", checkAuth, (req, res) => {
   res.render("login"); // Ensure you have a login.ejs view
 });
@@ -73,14 +83,6 @@ app.get("/logout", (req, res) => {
   });
 });
 
-//------------------------------------------
-
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
-
-// Statik dosyalar için klasörü ayarlayın
-app.use(express.static(path.join(__dirname, "public")));
-
 // Diğer sayfalar için rotalar
 app.get("/home", requireAuth, async (req, res) => {
   try {
@@ -97,10 +99,9 @@ app.get("/home", requireAuth, async (req, res) => {
   }
   // res.render('pages/home')
 });
-app.get("/register-company", requireAuth, async(req, res)=> {
-
-  res.render("pages/register-company")
-})
+app.get("/register-company", requireAuth, async (req, res) => {
+  res.render("pages/register-company");
+});
 app.get("/user-profile", requireAuth, async (req, res) => {
   try {
     const userName = req.session.user;
@@ -124,6 +125,9 @@ app.get("/stock-operations", requireAuth, (req, res) =>
 app.get("/reports", requireAuth, (req, res) => res.render("pages/reports"));
 app.get("/stock", requireAuth, (req, res) => res.render("pages/stock"));
 app.get("/approvals", requireAuth, (req, res) => res.render("pages/approvals"));
+
+
+// APILER //
 // app.get('/logout', (req, res) => {
 //     req.session.destroy();
 //     res.redirect('/login');
@@ -175,6 +179,13 @@ app.get("/api/product/get-all-operation-types", async (req, res) => {
   res.json(JSON.stringify(result));
 });
 app.post("/api/product/add-product", async (req, resp) => {
+  let userName = req.session.user;
+  let userCompanyResult = await userService.GetCompanyByUserName(userName);
+  if(!userCompanyResult || userCompanyResult.length === 0){
+    console.log("SKY");
+    resp.json({success:false, message:"Herhangi bir şirkete kayıtlı değilsiniz. Kullanıcı profil sayfasından bir şirkete katılabilir ya da şirketinizi kayıt edebilirsiniz"});
+  }
+
   let result = await productService.AddProduct(req.body);
   resp.json(JSON.stringify(result));
 });
