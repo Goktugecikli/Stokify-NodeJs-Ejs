@@ -97,7 +97,10 @@ app.get("/home", requireAuth, async (req, res) => {
   }
   // res.render('pages/home')
 });
+app.get("/register-company", requireAuth, async(req, res)=> {
 
+  res.render("pages/register-company")
+})
 app.get("/user-profile", requireAuth, async (req, res) => {
   try {
     const userName = req.session.user;
@@ -182,7 +185,12 @@ app.post("/api/user/join-company-by-company-id", async (req, resp) => {
   var result = await userService.JoinCompanyByInvateCode(invateCode, userName);
   resp.json(JSON.stringify(result));
 });
-
+app.post("/api/company/register", async (req, resp) => {
+  let companyName = req.body.companyName;
+  let userName = req.session.user;
+  var result = await companyService.Register(companyName, userName);
+  resp.json(result);
+});
 // Sunucuyu başlatın
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

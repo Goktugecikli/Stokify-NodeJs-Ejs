@@ -36,6 +36,15 @@ async function joinCompany() {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
+  let registerButton = document.getElementById("registerCompany");
+  if(registerButton){
+    registerButton.addEventListener("click", async function(){
+
+      window.location.href = "/register-company";
+
+    })
+  }
+
   var joinButton = document.getElementById("joinButton");
   if (joinButton) {
     joinButton.addEventListener("click", async function () {

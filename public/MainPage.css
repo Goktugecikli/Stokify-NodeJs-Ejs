@@ -148,6 +148,20 @@
 } 
 
 
+.error {
+  background-color: rgba(255, 0, 0, 0.1); /* Hafif kırmızı arka plan */
+  border: 1px solid red; /* İnce kırmızı sınır */
+  border-radius: 4px; /* Hafif yuvarlatılmış köşeler */
+  box-shadow: 0 0 5px rgba(255, 0, 0, 0.3); /* Hafif kırmızı gölge */
+  padding: 8px; /* İçerik ve sınır arasında boşluk */
+  transition: all 0.3s ease-in-out; /* Yumuşak geçiş efekti */
+}
+
+/* Placeholder için özel stil */
+.error::placeholder {
+  color: rgba(255, 0, 0, 0.7); /* Kırmızı tonunda placeholder */
+}
+
 .form-container {
   display: flex;
   justify-content: center;
