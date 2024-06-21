@@ -140,13 +140,17 @@ app.post("/api/user/auth", async (req, res) => {
   const isValidUser = await userService.validateUser(username, password);
   if (isValidUser || isValidUser.length > 0) {
 
+    let  userCompanyId=-1, companyOwnerUserId=-1;
     let companyInfoResult = await userService.GetCompanyByUserId(isValidUser[0].UserId);
-
+    if(companyInfoResult != null && companyInfoResult.length > 0){
+      userCompanyId = companyInfoResult[0].CompanyId;
+      companyInfoResult = companyInfoResult[0].CompanyOwnerUserId;
+    }
     req.session.user = username;
     req.session.userId = isValidUser[0].UserId;
     req.session.authorized = true;
-    req.session.userCompanyId = companyInfoResult[0].CompanyId ?? -1;
-    req.session.companyOwnerUserId = companyInfoResult[0].CompanyOwnerUserId ?? -1;
+    req.session.userCompanyId = userCompanyId;
+    req.session.companyOwnerUserId = companyOwnerUserId;
 
     res.json({ success: true, redirectUrl: "/home" });
   } else {
@@ -186,22 +190,16 @@ app.get("/api/product/get-all-operation-types", async (req, res) => {
 });
 app.post("/api/product/add-product", async (req, resp) => {
   let userName = req.session.user;
-  let userCompanyResult = await userService.GetCompanyByUserName(userName);
-  console.log(`${JSON.stringify(userCompanyResult)}`);
-  if (!userCompanyResult || userCompanyResult.length === 0) {
-    console.log("Girdi");
-    resp.json({
-      success: false,
-      message:
-        "Herhangi bir şirkete kayıtlı değilsiniz. Kullanıcı profil sayfasından bir şirkete katılabilir ya da şirketinizi kayıt edebilirsiniz",
-    });
+  let userCompanyId = req.session.userCompanyId;
+  if(userCompanyId == null || userCompanyId === -1){
+    resp.status(400).json({success: false,message:"Herhangi bir şirkete kayıtlı değilsiniz. Kullanıcı profil sayfasından bir şirkete katılabilir ya da şirketinizi kayıt edebilirsiniz"});
     return;
   }
   console.log("Devam etti");
   let result = await productService.AddProduct(
     req.body,
     userName,
-    userCompanyResult[0].CompanyId
+    userCompanyId
   );
   resp.json(JSON.stringify(result));
 });

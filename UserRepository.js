@@ -72,7 +72,7 @@ class UserRepository {
     try {
       await this.dbManager.connectDB();
       let params = { userId: userId };
-      let query = "SELECT CompanyId FROM CompanyUsers WHERE UserId = CONVERT(uniqueidentifier, @userId)";
+      let query = "SELECT * FROM CompanyUsers WHERE UserId = CONVERT(uniqueidentifier, @userId)";
       return await this.dbManager.queryWithResult(query, params);
     } catch (err) {
       console.error("Error retrieving company by user ID:", err);
