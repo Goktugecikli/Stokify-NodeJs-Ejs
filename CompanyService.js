@@ -21,7 +21,6 @@ class CompanyService {
   }
   async IsCompanyHasProduct(productId, userCompanyId) {
     try {
-      console.log(`ISCOMPANYHASPRD: ${productId}, ${userCompanyId}`);
       return await this.companyRepository.IsCompanyHasProduct(productId, userCompanyId);
     } catch (err) {
       console.log("Company Product is exists err");

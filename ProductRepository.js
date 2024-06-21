@@ -54,7 +54,29 @@ class ProductRepository {
       await this.DbManager.closeDB(); // Veritabanı bağlantısını kapat
     }
   }
-
+  async AddProductTransaction(productTableId, quantity,userId,companyId, transactionTypeId,previousQuantity){
+    try {
+      await this.DbManager.connectDB();
+      let params = {
+        productTableId: productTableId,
+        quantity: quantity,
+        userId: userId,
+        companyId: companyId,
+        transactionTypeId: transactionTypeId,
+        previousQuantity:previousQuantity
+      };
+      console.log(`TransactionRepo: ${JSON.stringify(params)}`);
+      let query ="INSERT INTO ProductsTransactions (ProductId,UserId, CompanyId, TrancationTypeId, TransactionDate,CurrentQuantity, PreviousQuantity) VALUES ((Select ProductId from Products where Id=@productTableId), @userId, @companyId, @transactionTypeId, getDate(), @quantity, @previousQuantity);Select SCOPE_IDENTITY() as ID";
+      return await this.DbManager.queryWithResult(query, params);
+    } catch (error) {
+      console.log(
+        "There is an error while adding product transaction at ProductRepository. Error: ",
+        error
+      );
+    } finally {
+      await this.DbManager.closeDB(); // Veritabanı bağlantısını kapat
+    }
+  }
   async CreateProduct(productToAdd, userId) {
     try {
       await this.DbManager.connectDB();

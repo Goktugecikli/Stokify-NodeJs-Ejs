@@ -51,70 +51,175 @@ class ProductService {
       );
     }
   }
-  async #CreateProductOperation(productToAdd, userId,userCompanyId, companyService){
-    let resultToAdd = await this.productRepository.CreateProduct(productToAdd, userId, userCompanyId);
-    if (!resultToAdd || resultToAdd.length === 0) {
-        return { success: false, message: "Error occurred while adding the product." };
+
+  async AddProductTransaction(
+    productTableId,
+    qunatity,
+    userId,
+    companyId,
+    transactionTypeId,
+    previousQuantity
+  ) {
+    try {
+      console.log("Transaction Fonksiyonu çağırıldı");
+      return await this.productRepository.AddProductTransaction(
+        productTableId,
+        qunatity,
+        userId,
+        companyId,
+        transactionTypeId,
+        previousQuantity
+      );
+    } catch (err) {
+      console.log(
+        "There is an error while getting ProductOperationTypes at ProductService. Error",
+        err
+      );
+      return { success: false, message: err };
     }
-    let productTableId = resultToAdd[0].Id;
-    let resultToCompany = companyService.AddProductToCompanyIdAndProductTableId(productTableId, userCompanyId);
-    if (!resultToCompany || resultToCompany.length === 0) {
-        return { success: false, message: "Failed to register in company." };
-    }
-    return {success:true, message: "Ürün başarıyla eklendi."};
   }
 
-  async AddProduct(productToAdd, userId,userCompanyId) {
+  async #CreateProductOperation(
+    productToAdd,
+    userId,
+    userCompanyId,
+    companyService
+  ) {
+    let resultToAdd = await this.productRepository.CreateProduct(
+      productToAdd,
+      userId,
+      userCompanyId
+    );
+    if (!resultToAdd || resultToAdd.length === 0) {
+      return {
+        success: false,
+        message: "Error occurred while adding the product.",
+      };
+    }
+    let productTableId = resultToAdd[0].Id;
+    let resultToCompany = companyService.AddProductToCompanyIdAndProductTableId(
+      productTableId,
+      userCompanyId
+    );
+    if (!resultToCompany || resultToCompany.length === 0) {
+      return { success: false, message: "Failed to register in company." };
+    }
+
+    var transactionResulArr = await this.AddProductTransaction(
+      productTableId,
+      productToAdd.quantity,
+      userId,
+      userCompanyId,
+      productToAdd.operationType,
+      0
+    );
+    if (!transactionResulArr || transactionResulArr.lengt === 0) {
+      return { success: false, message: "Transaction kaydı yapılamadı." };
+    }
+    return { success: true, message: "Ürün başarıyla eklendi." };
+  }
+  async AddProduct(productToAdd, userId, userCompanyId) {
     try {
-        let companyService = new CompanyService();
-        let product = await this.ProductIsExists(productToAdd);
+      let companyService = new CompanyService();
+      let product = await this.ProductIsExists(productToAdd);
 
-        if (product.length === 0) {
-          return await this.#CreateProductOperation(productToAdd,userId,userCompanyId,companyService);
-        } else {
-            console.log(`${JSON.stringify(product)}`);
-            var isCompanyHasProduct = await companyService.IsCompanyHasProduct(product[0].ProductId, userCompanyId);
-           
-            if(!isCompanyHasProduct || isCompanyHasProduct.length === 0){
-              console.log("geldi");
-              return await this.#CreateProductOperation(productToAdd,userId,userCompanyId,companyService); 
-            }
-            console.log(`Şirket bu ürüne sahip mi: ${isCompanyHasProduct}`);
-            //#region Ürün Miktar hesaplama
-            let currentQuantityOfProduct = await this.productRepository.GetQuantityByProductId(product[0].Id);
-            currentQuantityOfProduct = currentQuantityOfProduct[0].quantity;
+      if (product.length === 0) {
+        return await this.#CreateProductOperation(
+          productToAdd,
+          userId,
+          userCompanyId,
+          companyService
+        );
+      } else {
+        var isCompanyHasProduct = await companyService.IsCompanyHasProduct(
+          product[0].ProductId,
+          userCompanyId
+        );
 
-            let operationType = await this.productRepository.GetOperationTypeById(productToAdd.operationType);
-            if (!operationType || operationType.length === 0) {
-                return { success: false, message: `Operation type ${productToAdd.operationType} not found.` };
-            }
-            let quantityToAdd = parseInt(productToAdd.quantity);
-            if (isNaN(quantityToAdd)) {
-                return { success: false, message: `Invalid quantity: ${productToAdd.quantity}` };
-            }
-
-            let resultQuantity = operationType[0].IsIncrease
-                ? currentQuantityOfProduct + quantityToAdd
-                : currentQuantityOfProduct - quantityToAdd;
-
-            if (resultQuantity < 0 && !operationType[0].IsIncrease) {
-                return { success: false, message: `Insufficient stock. Current quantity: ${currentQuantityOfProduct}` };
-            }
-
-            let result = await this.productRepository.SetQuantity(resultQuantity, product[0].Id);
-            if (result[0] === 0) {
-                return { success: false, message: "Error occurred while updating quantity." };
-            }
-            //#endregion            
+        if (!isCompanyHasProduct || isCompanyHasProduct.length === 0) {
+          return await this.#CreateProductOperation(
+            productToAdd,
+            userId,
+            userCompanyId,
+            companyService
+          );
         }
 
-        return { success: true, message: "Product added successfully." };
-    } catch (err) {
-        console.log("Error adding product at ProductService:", err);
-        return { success: false, message: "Error occurred while adding the product." };
-    }
-}
+        //#region Ürün Miktar hesaplama
+        let currentQuantityOfProduct =
+          await this.productRepository.GetQuantityByProductId(product[0].Id);
+        currentQuantityOfProduct = currentQuantityOfProduct[0].quantity;
 
+        let operationType = await this.productRepository.GetOperationTypeById(
+          productToAdd.operationType
+        );
+        if (!operationType || operationType.length === 0) {
+          return {
+            success: false,
+            message: `Operation type ${productToAdd.operationType} not found.`,
+          };
+        }
+
+        let quantityToAdd = parseInt(productToAdd.quantity);
+        if (isNaN(quantityToAdd)) {
+          return {
+            success: false,
+            message: `Invalid quantity: ${productToAdd.quantity}`,
+          };
+        }
+
+        let resultQuantity = operationType[0].IsIncrease
+          ? currentQuantityOfProduct + quantityToAdd
+          : currentQuantityOfProduct - quantityToAdd;
+
+        if (resultQuantity < 0 && !operationType[0].IsIncrease) {
+          return {
+            success: false,
+            message: `Insufficient stock. Current quantity: ${currentQuantityOfProduct}`,
+          };
+        }
+
+        let result = await this.productRepository.SetQuantity(
+          resultQuantity,
+          product[0].Id
+        );
+        if (result[0] === 0) {
+          return {
+            success: false,
+            message: "Error occurred while updating quantity.",
+          };
+        }
+
+        console.log(`${JSON.stringify(product[0].Id)}, ${resultQuantity}, ${userId}, ${userCompanyId}`);
+        
+        try {
+          var transactionResultArr = await this.AddProductTransaction(
+            product[0].Id,
+            resultQuantity,
+            userId,
+            userCompanyId,
+            productToAdd.operationType,
+            currentQuantityOfProduct
+          );
+          console.log(`Transaction Sonucu: ${transactionResultArr}`);
+          if (!transactionResultArr || transactionResultArr.length === 0) {
+            return { success: false, message: "Transaction kaydı yapılamadı." };
+          }
+        } catch (transactionError) {
+          console.error("Transaction Error: ", transactionError);
+          return { success: false, message: "Transaction sırasında bir hata meydana geldi." };
+        }
+        //#endregion
+      }
+      return { success: true, message: "Stok işlemi başarıyla yapıldı." };
+    } catch (err) {
+      console.error("AddProduct Error: ", err);
+      return {
+        success: false,
+        message: "Stok işleminde bir hata meydana geldi.",
+      };
+    }
+  }
 }
 
 export default ProductService;
