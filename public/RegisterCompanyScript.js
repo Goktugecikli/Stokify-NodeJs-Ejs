@@ -27,14 +27,13 @@ async function handleFormSubmit(event) {
     });
 
     const result = await response.json();
-    console.log(result);
 
     if (result.success === false) {
       alert(result.message);
     }
 
     alert(
-      "Şirket kayıt olma işlemi başarılı. yönelneidrme işlemi yapılacaktır."
+      "Şirket kayıt olma işlemi başarılı. yönlendirme işlemi yapılacaktır."
     );
 
     setTimeout(function () {
