@@ -37,7 +37,7 @@ class ProductService {
       );
     }
   }
-    async AddProduct(productToAdd) {
+    async AddProduct(productToAdd, userName) {
       try {
         // Check if product exists
         let product = await this.ProductIsExists(productToAdd);
@@ -45,7 +45,7 @@ class ProductService {
     
         if (product.length === 0) {
           // Product does not exist, add it
-          let resultToAdd = await this.productRepository.AddProduct(productToAdd);
+          let resultToAdd = await this.productRepository.AddProduct(productToAdd,userName);
           if (!resultToAdd || resultToAdd.length === 0 || !resultToAdd[0].AddedProductId) {
            console.log(JSON.stringify(success));
             return {

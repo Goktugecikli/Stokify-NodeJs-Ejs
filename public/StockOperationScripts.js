@@ -28,41 +28,45 @@ document.addEventListener("DOMContentLoaded", () => {
     .getElementById("productForm")
     .addEventListener("submit", handleFormSubmit);
 });
-
+function isFormDataValid(form) {
+  var formData = new FormData(form);
+  for (let [key, value] of formData.entries()) {
+    if (value.trim() === "") {
+      // Boş değer bulundu, uyarı göster ve fonksiyondan çık
+      alert("Lütfen Bütün Alanları Doldurunuz.");
+      return false;
+    }
+  }
+  // Tüm değerler dolu
+  return true;
+}
 async function handleFormSubmit(event) {
   event.preventDefault(); // Sayfanın yenilenmesini engelle
-  var form = document.getElementById('productForm');
+  var form = document.getElementById("productForm");
 
   var formData = new FormData(form);
-
-  // FormData içeriğini kontrol etmek için (isteğe bağlı)
-//   for (var pair of formData.entries()) {
-//     console.log(pair[0] + ": " + pair[1]);
-//   }
-//   var selectedOperationType = document.getElementById("operationType").value;
-//   var productName = document.getElementById("productName").value;
-//   var brand = document.getElementById("brand").value;
-//   var barcode = document.getElementById("barcode").value;
-//   var quantity = document.getElementById("quantity").value;
-
+  let validate = isFormDataValid(form);
+  if (!validate) {
+    return;
+  }
   if (quantity === 0) {
     alert("0 dan büyük bir adet sayısı girmelisiniz");
     return;
   }
 
   var jsonObject = {};
-  formData.forEach(function(value, key){
+  formData.forEach(function (value, key) {
     jsonObject[key] = value;
   });
 
   const response = await fetch("/api/product/add-product", {
     method: "POST",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify(jsonObject)
+    body: JSON.stringify(jsonObject),
   });
-console.log(JSON.stringify(response))
+  console.log(JSON.stringify(response));
   const result = await response.json();
   console.log("test: ", result);
   if (result.success) {
@@ -76,11 +80,15 @@ console.log(JSON.stringify(response))
 async function fetchIslemTurleri() {
   try {
     const response = await fetch("/api/product/get-all-operation-types"); // Node.js sunucusuna istek gönder
-    const operationTypes = await response.json(); // JSON formatında yanıtı al
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    const responseJson = await response.json(); // JSON formatında yanıtı al
+    const operationTypes = JSON.parse(responseJson); // JSON formatında yanıtı al
 
     const DdOperationTypes = document.getElementById("operationType");
     DdOperationTypes.innerHTML = '<option value="">Seçiniz</option>';
-
+    console.log(`${JSON.stringify(operationTypes)}`);
     operationTypes.forEach((type) => {
       const option = document.createElement("option");
       option.value = type.ID;
@@ -88,7 +96,7 @@ async function fetchIslemTurleri() {
       DdOperationTypes.appendChild(option);
     });
   } catch (error) {
-    console.error(
+    console.log(
       "There is a error while getting operation types. Error: ",
       error
     );

@@ -20,12 +20,18 @@ class ProductRepository {
     }
   }
 
-  async AddProduct(productToAdd) {
+  async AddProduct(productToAdd,userName) {
     try {
       await this.DbManager.connectDB();
+      let params = {
+        productName : productToAdd.productName,
+        brand : productToAdd.brand,
+        barcode : productToAdd.barcode,
+        userName: userName
+      };
       let query =
-        "INSERT INTO Products (ProductName, Brand, Barcode, Quantity) VALUES (@productName, @brand,@barcode, 0);SELECT SCOPE_IDENTITY() AS Id;";
-      return await this.DbManager.queryWithResult(query, productToAdd);
+        "INSERT INTO Products (ProductName, Brand, Barcode, Quantity,CreatedBy, CreatedAt) VALUES (@productName, @brand,@barcode, 0, @userName, getDate());SELECT SCOPE_IDENTITY() AS Id;";
+      return await this.DbManager.queryWithResult(query, params);
     } catch (error) {
       console.log(
         "There is an error while adding product at ProductRepository. Error: ",
