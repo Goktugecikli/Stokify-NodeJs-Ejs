@@ -229,9 +229,10 @@ app.post("/api/company/register", async (req, resp) => {
 
 app.get("/api/company/get-invite-code", async (req, resp) => {
   let userId = req.session.userId;
-  let companyOwnerUserId = req.session.userId;
+  let companyOwnerUserId = req.session.companyOwnerUserId;
+  console.log(`${userId}, ${companyOwnerUserId}`);
   if(userId !== companyOwnerUserId){
-    resp.json({success:false, message:"Katılım kodlarını sadece şirket sahipleri alabilir.Şirket Sahibi ile iletişime geçiniz."});
+    resp.json({success:false, message:"Katılım kodlarını sadece Şirket sahipleri alabilir.\nLütfen Şirket Sahibi ile iletişime geçiniz."});
   }
   let result = await companyService.GetCompanyInviteCodeByUserId(userId);
   console.log(JSON.stringify(result));
