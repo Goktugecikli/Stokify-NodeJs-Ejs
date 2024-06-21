@@ -45,7 +45,7 @@ class UserRepository {
     try {
       await this.dbManager.connectDB();
       let params = { userId: userId, companyId: companyId };
-      let query = "INSERT INTO CompanyUsers (UserId, CompanyId) VALUES (@userId, @companyId);SELECT SCOPE_IDENTITY() AS Id;";
+      let query = "INSERT INTO CompanyUsers (UserId, CompanyId, CreatedAt) VALUES (@userId, @companyId, getDate());SELECT SCOPE_IDENTITY() AS Id;";
       return await this.dbManager.queryWithResult(query, params);
     } catch (err) {
       console.error("Error joining company:", err);
