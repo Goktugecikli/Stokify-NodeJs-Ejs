@@ -10,17 +10,35 @@ function togglePassword() {
   }
 }
 
-
 document.addEventListener("DOMContentLoaded", function () {
   let registerButton = document.getElementById("registerCompany");
-  if(registerButton){
-    registerButton.addEventListener("click", async function(){
-
+  if (registerButton) {
+    registerButton.addEventListener("click", async function () {
       window.location.href = "/register-company";
-
-    })
+    });
   }
+  let getInviteCodeButton = document.getElementById("getInviteCode");
+  if (getInviteCodeButton) {
+    getInviteCodeButton.addEventListener("click", async (event) => {
+      event.preventDefault();
 
+      try {
+        const response = await fetch("/api/company/get-invite-code");
+        
+        if(!response.ok){
+          console.log("Bad request");
+          return;
+        }
+
+        var responseJson = await response.json();
+        console.log(JSON.stringify(responseJson));
+
+        
+      } catch (err) {
+        console.log("İstek atılırken hata meydana geldi.");
+      }
+    });
+  }
   var joinButton = document.getElementById("joinButton");
   if (joinButton) {
     joinButton.addEventListener("click", async function () {
@@ -41,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         const result = await response.json();
-        console.log(result); 
+        console.log(result);
 
         if (result.success === false) {
           alert(result.message);
@@ -51,8 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         setTimeout(function () {
           location.reload();
-        }, 2000); 
-
+        }, 2000);
       } catch (error) {
         console.error("Fetch error:", error);
         alert("An error occurred while joining the company.");

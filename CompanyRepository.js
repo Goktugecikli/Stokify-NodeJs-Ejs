@@ -4,6 +4,20 @@ class CompanyRepository {
   constructor(dbConfig) {
     this.dbManager = new DbManager(dbConfig);
   }
+
+  async CompanyIdentifierById(id){
+    try {
+      await this.dbManager.connectDB(); // Veritabanına bağlan
+      let params = { id: id };
+      let query = "Select CompanyId from Companies where Id=@id";
+      return await this.dbManager.queryWithResult(query, params);
+    } catch (err) {
+      // console.error("Error repossitory connection. Error ", err);
+    } finally {
+      await this.dbManager.closeDB(); // Veritabanı bağlantısını kapat
+    }
+  }
+
   async Register(companyName, userName, invateCode) {
     try {
       await this.dbManager.connectDB(); // Veritabanına bağlan

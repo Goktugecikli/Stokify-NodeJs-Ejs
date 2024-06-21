@@ -112,10 +112,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-
-
-
-
 // function getAlert(msg, color) {
 //     Toastify({
 //         text: msg,

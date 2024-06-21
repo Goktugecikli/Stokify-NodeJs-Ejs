@@ -9,8 +9,6 @@ import UserService from "./UserService.js";
 import ProductService from "./ProductService.js";
 import CompanyService from "./CompanyService.js";
 
-
-
 const FileStore = FileStoreFactory(session);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -53,7 +51,6 @@ function requireAuth(req, res, next) {
   next();
 }
 
-
 //------------------------------------------
 
 app.set("view engine", "ejs");
@@ -61,7 +58,6 @@ app.set("views", path.join(__dirname, "views"));
 
 // Statik dosyalar için klasörü ayarlayın
 app.use(express.static(path.join(__dirname, "public")));
-
 
 app.get("/login", checkAuth, (req, res) => {
   res.render("login"); // Ensure you have a login.ejs view
@@ -126,7 +122,6 @@ app.get("/reports", requireAuth, (req, res) => res.render("pages/reports"));
 app.get("/stock", requireAuth, (req, res) => res.render("pages/stock"));
 app.get("/approvals", requireAuth, (req, res) => res.render("pages/approvals"));
 
-
 // APILER //
 // app.get('/logout', (req, res) => {
 //     req.session.destroy();
@@ -182,13 +177,21 @@ app.post("/api/product/add-product", async (req, resp) => {
   let userName = req.session.user;
   let userCompanyResult = await userService.GetCompanyByUserName(userName);
   console.log(`${JSON.stringify(userCompanyResult)}`);
-  if(!userCompanyResult || userCompanyResult.length === 0){
+  if (!userCompanyResult || userCompanyResult.length === 0) {
     console.log("Girdi");
-    resp.json({success:false, message:"Herhangi bir şirkete kayıtlı değilsiniz. Kullanıcı profil sayfasından bir şirkete katılabilir ya da şirketinizi kayıt edebilirsiniz"});
+    resp.json({
+      success: false,
+      message:
+        "Herhangi bir şirkete kayıtlı değilsiniz. Kullanıcı profil sayfasından bir şirkete katılabilir ya da şirketinizi kayıt edebilirsiniz",
+    });
     return;
   }
   console.log("Devam etti");
-  let result = await productService.AddProduct(req.body,userName, userCompanyResult[0].CompanyId);
+  let result = await productService.AddProduct(
+    req.body,
+    userName,
+    userCompanyResult[0].CompanyId
+  );
   resp.json(JSON.stringify(result));
 });
 app.post("/api/user/join-company-by-company-id", async (req, resp) => {
@@ -202,6 +205,16 @@ app.post("/api/company/register", async (req, resp) => {
   let companyName = req.body.companyName;
   let userName = req.session.user;
   var result = await companyService.Register(companyName, userName);
+  if (result.success === true) {
+    req.session.companyId = result.companyId;
+    console.log(JSON.stringify(req.session));
+  }
+  resp.json(result);
+});
+
+app.get("/api/company/get-invite-code", async (req, resp) => {
+  let userName = req.session.user;
+  let result = await companyService.GetCompanyInviteCodeByUserName(userName);
   resp.json(result);
 });
 // Sunucuyu başlatın
