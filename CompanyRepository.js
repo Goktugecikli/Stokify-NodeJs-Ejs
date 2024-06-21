@@ -53,7 +53,19 @@ class CompanyRepository {
       await this.dbManager.connectDB(); // Veritabanına bağlan
       let params = { productId: productId, companyId: userCompanyId };
       let query =
-        " select * from CompanyProducts where ProductId= CONVERT(uniqueidentifier,@productId) and CompanyId = CONVERT(uniqueidentifier,@companyId)";
+        "select * from CompanyProducts where ProductId= CONVERT(uniqueidentifier,@productId) and CompanyId = CONVERT(uniqueidentifier,@companyId)";
+      return await this.dbManager.queryWithResult(query, params);
+    } catch (err) {
+      // console.error("Error repossitory connection. Error ", err);
+    } finally {
+      await this.dbManager.closeDB(); // Veritabanı bağlantısını kapat
+    }
+  }
+  async  GetUserCreatedCompanyByUserId(userId){
+    try {
+      await this.dbManager.connectDB(); // Veritabanına bağlan
+      let params = { userId: userId};
+      let query ="select * from Companies where CompanyOwnerUserId= CONVERT(uniqueidentifier,@userId)";
       return await this.dbManager.queryWithResult(query, params);
     } catch (err) {
       // console.error("Error repossitory connection. Error ", err);

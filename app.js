@@ -148,9 +148,6 @@ app.post("/api/user/auth", async (req, res) => {
     req.session.userCompanyId = companyInfoResult[0].CompanyId ?? -1;
     req.session.companyOwnerUserId = companyInfoResult[0].CompanyOwnerUserId ?? -1;
 
-
-    
-    console.log(JSON.stringify(req.session));
     res.json({ success: true, redirectUrl: "/home" });
   } else {
     res.json({ success: false, message: "Kullanıcı adı veya şifre yanlış." });
@@ -158,10 +155,10 @@ app.post("/api/user/auth", async (req, res) => {
 });
 
 app.post("/api/user/register", async (req, res) => {
-  // console.log(JSON.stringify(req.body));
+
   const { firstName, lastName, email, username, password } = req.body;
   const isExistUser = await userService.IsExistUser(username);
-  // console.log(isExistUser);
+
   if (isExistUser != null && isExistUser.length > 0) {
     res.json({ success: false, message: "kullanıcı zaten kayıtlı" });
     return;
@@ -227,9 +224,14 @@ app.post("/api/company/register", async (req, resp) => {
 });
 
 app.get("/api/company/get-invite-code", async (req, resp) => {
-  let userName = req.session.user;
-  let result = await companyService.GetCompanyInviteCodeByUserName(userName);
-  resp.json(result);
+  let userId = req.session.userId;
+  let companyOwnerUserId = req.session.userId;
+  if(userId !== companyOwnerUserId){
+    resp.json({success:false, message:"Katılım kodlarını sadece şirket sahipleri alabilir.Şirket Sahibi ile iletişime geçiniz."});
+  }
+  let result = await companyService.GetCompanyInviteCodeByUserId(userId);
+  console.log(JSON.stringify(result));
+  resp.status(200).json(result);
 });
 
 //#endregion  --------------------------------------- APILER -------------------------------------------------- //

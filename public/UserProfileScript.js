@@ -21,21 +21,25 @@ document.addEventListener("DOMContentLoaded", function () {
   if (getInviteCodeButton) {
     getInviteCodeButton.addEventListener("click", async (event) => {
       event.preventDefault();
-
+  
       try {
         const response = await fetch("/api/company/get-invite-code");
-        
-        if(!response.ok){
-          console.log("Bad request");
+  
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+  
+        let result = await response.json();
+        console.log("Gelen Result: ", result);
+        if (result.success === false) {
+          alert(result.message);
           return;
         }
-
-        var responseJson = await response.json();
-        console.log(JSON.stringify(responseJson));
-
-        
+  
+        alert(`Katılım Kodu: ${result.inviteCode}`);
+  
       } catch (err) {
-        console.log("İstek atılırken hata meydana geldi.");
+        console.log("İstek atılırken hata meydana geldi.", err);
       }
     });
   }

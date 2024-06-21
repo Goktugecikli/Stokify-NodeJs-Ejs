@@ -46,12 +46,18 @@ class CompanyService {
         return { success: false, message: "Şirket kaydı başarısız. 2" };
       }
 
-      var companyIdResult = await this.companyRepository.CompanyIdentifierById(registerResult[0].Id);
-      if(!companyIdResult ||companyIdResult.length === 0){
-        return { success: false, message: "Şirket kaydı başarısız. 3" };  
-        }
+      var companyIdResult = await this.companyRepository.CompanyIdentifierById(
+        registerResult[0].Id
+      );
+      if (!companyIdResult || companyIdResult.length === 0) {
+        return { success: false, message: "Şirket kaydı başarısız. 3" };
+      }
 
-      return { success: true, redirectUrl: "/home", companyId: companyIdResult[0].CompanyId };
+      return {
+        success: true,
+        redirectUrl: "/home",
+        companyId: companyIdResult[0].CompanyId,
+      };
     } catch (err) {
       console.error("Error copmany register", err);
     }
@@ -74,13 +80,19 @@ class CompanyService {
       console.error("Error copmany find", err);
     }
   }
-  async GetCompanyInviteCodeByUserName(userName){
-    try{
-      // let userIsOwner = 
-    }catch(err){
+  async GetCompanyInviteCodeByUserId(userId) {
+    try {
+      let isUserOwnerResultArr = await this.companyRepository.GetUserCreatedCompanyByUserId(userId);
+      if (!isUserOwnerResultArr || isUserOwnerResultArr.length === 0) {
+        return {
+          success: false,
+          message: "Kod alınırken hata meydana geldi.",
+        };
+      }
+      return ({success:true, inviteCode:isUserOwnerResultArr[0].InviteCode})
+    } catch (err) {
       console.log("Hata meydana geldi. Hata: ", err);
     }
-    
   }
 
   async GetCompanyDetailsByInvateCode(invateCode) {
