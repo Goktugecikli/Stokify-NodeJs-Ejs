@@ -5,9 +5,19 @@ class ProductService {
   constructor() {
     this.productRepository = new ProductRepository();
   }
-  async GetProductTransactionByUserId(userId) {
+  async GetProductTransactionTotalPageByUserIdAndPageSize(userId, pageSize) {
     try {
-      return await this.productRepository.GetProductTransactionByUserId(userId);
+      return await this.productRepository.GetProductTransactionTotalPageByUserIdAndPageSize(userId, pageSize);
+    } catch (err) {
+      console.log(
+        "There is an error while getting ProductOperationTypes at ProductService. Error",
+        err
+      );
+    }
+  }
+  async GetProductTransactionByUserId(userId,pageNumber, pageSize) {
+    try {
+      return await this.productRepository.GetProductTransactionByUserId(userId,pageNumber,pageSize);
     } catch (err) {
       console.log(
         "There is an error while getting ProductOperationTypes at ProductService. Error",

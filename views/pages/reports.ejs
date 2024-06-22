@@ -14,10 +14,7 @@
 
 <body id="body">
     <%- include('../partials/sidebar') %>
-        <!-- <h1 style="text-align: center;">Report page</h1> -->
-        <!-- <br> -->
-
-        <%- include('../partials/table-partial', { reports:reports, header: "Eklediğim Ürünler"}) %>
+        <%- include('../partials/table-partial', { reports:reports, header: "Eklediğim Ürünler", totalPages:totalPages}) %>
 </body>
 <script src="ReportsScript.js"></script>
 

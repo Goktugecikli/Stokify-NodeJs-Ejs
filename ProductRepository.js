@@ -18,12 +18,33 @@ class ProductRepository {
       await this.DbManager.closeDB(); // Veritabanı bağlantısını kapat
     }
   }
-  async GetProductTransactionByUserId(userId) {
+  async GetProductTransactionTotalPageByUserIdAndPageSize(userId, pageSize) {
     try {
       await this.DbManager.connectDB();
-      let params = {
-        userId: userId,
-      };
+      let params = { userId: userId, pageSize: pageSize };
+      let query = `SELECT CEILING(COUNT(*) * 1.0 / @pageSize) AS TotalPages
+                        FROM ProductsTransactions AS PT WITH (NOLOCK)
+                      INNER JOIN Companies AS C ON PT.CompanyId=C.CompanyId
+                      INNER JOIN Products AS P on P.ProductId=PT.ProductId
+                      INNER JOIN ProductTransactionTypes as PTY on PTY.ID= PT.TrancationTypeId
+                      INNER JOIN Users as U ON u.UserId = pt.UserId
+
+                    where PT.UserId=@userId`;
+
+      return await this.DbManager.queryWithResult(query, params);
+    } catch (error) {
+      console.log(
+        "There is an error while adding product at ProductRepository. Error: ",
+        error
+      );
+    } finally {
+      await this.DbManager.closeDB(); // Veritabanı bağlantısını kapat
+    }
+  }
+  async GetProductTransactionByUserId(userId,pageNumber, pageSize) {
+    try {
+      await this.DbManager.connectDB();
+      let params = {userId: userId,pageNumber:pageNumber, pageSize:pageSize};
       let query = `SELECT 
                       PT.ID as 'Transaction ID', 
                       P.ProductName AS 'Ürün İsmi',
@@ -40,7 +61,9 @@ class ProductRepository {
                       INNER JOIN ProductTransactionTypes as PTY on PTY.ID= PT.TrancationTypeId
                       INNER JOIN Users as U ON u.UserId = pt.UserId
 
-                    where PT.UserId=@userId`;
+                    where PT.UserId=@userId  ORDER BY P.CreatedAt -- Sıralama ekleyebilirsiniz
+                    OFFSET (@pageNumber - 1) * @pageSize ROWS
+                    FETCH NEXT @pageSize ROWS ONLY;`;
       return await this.DbManager.queryWithResult(query, params);
     } catch (error) {
       console.log(
@@ -66,13 +89,11 @@ class ProductRepository {
     }
   }
 
-  async GetCompanyStockPageCountByCompanIdAndPageSize(userCompanyId,pageSize){
+  async GetCompanyStockPageCountByCompanIdAndPageSize(userCompanyId, pageSize) {
     try {
       await this.DbManager.connectDB();
-      let params = {companyId: userCompanyId,
-        pageSize:pageSize
-      };
-        let query =`SELECT CEILING(COUNT(*) * 1.0 / @pageSize) AS TotalPages
+      let params = { companyId: userCompanyId, pageSize: pageSize };
+      let query = `SELECT CEILING(COUNT(*) * 1.0 / @pageSize) AS TotalPages
   FROM CompanyProducts AS CP WITH (NOLOCK)
   INNER JOIN Companies AS C ON CP.CompanyId = C.CompanyId
   INNER JOIN Products AS P ON P.ProductId = CP.ProductId
@@ -91,8 +112,12 @@ class ProductRepository {
   async GetCompanyStocksByCompanyId(userCompanyId, pageNumber, pageSize) {
     try {
       await this.DbManager.connectDB();
-      let params = {companyId: userCompanyId, pageNumber:pageNumber, pageSize:pageSize};
-      let query =`SELECT 
+      let params = {
+        companyId: userCompanyId,
+        pageNumber: pageNumber,
+        pageSize: pageSize,
+      };
+      let query = `SELECT 
                     C.Name as 'Şirket İsmi',
                     CP.ProductId AS 'Ürün Kodu',
                     P.ProductName AS 'Ürün İsmi',

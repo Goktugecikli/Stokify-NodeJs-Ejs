@@ -121,23 +121,23 @@ app.get("/stock-operations", requireAuth, (req, res) =>
 );
 
 app.get("/my-reports", requireAuth, async (req, res) =>{
+  let pageNumber = req.query.pageNumber || 1; 
   let userId = req.session.userId;
-  var myReportsResultArr = await productService.GetProductTransactionByUserId(userId);
-  res.render("pages/reports",{reports: myReportsResultArr})
+  let totalPageCountArr = await productService.GetProductTransactionTotalPageByUserIdAndPageSize(userId,5);
+  if(!totalPageCountArr || totalPageCountArr.length ===0)    {
+    res.status(400).send("Sayfalandırmada bir hata meydana geldi.")
+  }
+  let resultArr = await productService.GetProductTransactionByUserId(userId,pageNumber,totalPageCountArr[0].TotalPages);
+  res.render("pages/reports",{reports: resultArr, totalPages:totalPageCountArr[0].TotalPages})
 });
 
 app.get("/company-stocks", requireAuth, async (req, res) => {
   let pageNumber = req.query.pageNumber || 1; 
-  if(!pageNumber || pageNumber === "")    {
-    pageNumber=1;
-  }
-  console.log(pageNumber);
   let userCompanyId = req.session.userCompanyId;
   let totalPageCountArr = await productService.GetCompanyStockPageCountByCompanIdAndPageSize(userCompanyId, 5);
   if(!totalPageCountArr || totalPageCountArr.length ===0)    {
       res.status(400).send("Sayfalandırmada bir hata meydana geldi.")
     }
-    console.log(JSON.stringify(totalPageCountArr));
   let resultArr = await productService.GetCompanyStocksByCompanyId(userCompanyId,pageNumber,totalPageCountArr[0].TotalPages);
   res.render("pages/stock", {reports: resultArr, totalPages:totalPageCountArr[0].TotalPages})
 });
