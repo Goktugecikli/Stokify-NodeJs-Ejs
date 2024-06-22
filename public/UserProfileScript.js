@@ -65,10 +65,34 @@ document.addEventListener("DOMContentLoaded", function () {
   var joinButton = document.getElementById("joinButton");
   if (joinButton) {
     joinButton.addEventListener("click", async function () {
-      var userInput = prompt("Katılma kodunuzu giriniz.", "");
-
-      if (userInput === null) {
-        alert("İptal Edildi.");
+       const { value: userInput } = await Swal.fire({
+        title: "Lütfen Şirket Davet Kodunuzu Giriniz.",
+        input: "text",
+        inputLabel: "Davet Kodun:",
+        showCancelButton: true,
+        inputValidator: (value) => {
+          if (!value) {
+            return "Ops Bir şeyler hatalı ...";
+          }
+        }
+      });
+    
+      if (userInput === undefined) {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 2000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+        Toast.fire({
+          icon: "info",
+          title: "İşlemi İptal Ettiniz"
+        });
         return;
       }
 
@@ -88,11 +112,25 @@ document.addEventListener("DOMContentLoaded", function () {
           alert(result.message);
         }
 
-        alert("Şirkete katıldınız. Sayfa 2 saniye içinde yenilecenektir.");
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+        Toast.fire({
+          icon: "success",
+          title: "Şirkete hoşgeldiniz"
+        });
 
         setTimeout(function () {
           location.reload();
-        }, 2000);
+        }, 3005);
       } catch (error) {
         console.error("Fetch error:", error);
         alert("An error occurred while joining the company.");
