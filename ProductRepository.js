@@ -65,12 +65,36 @@ class ProductRepository {
       await this.DbManager.closeDB(); // Veritabanı bağlantısını kapat
     }
   }
+
+  async GetCompanyStockPageCountByCompanIdAndPageSize(userCompanyId,pageSize){
+    try {
+      await this.DbManager.connectDB();
+      let params = {companyId: userCompanyId,
+        pageSize:pageSize
+      };
+        let query =`SELECT CEILING(COUNT(*) * 1.0 / @pageSize) AS TotalPages
+  FROM CompanyProducts AS CP WITH (NOLOCK)
+  INNER JOIN Companies AS C ON CP.CompanyId = C.CompanyId
+  INNER JOIN Products AS P ON P.ProductId = CP.ProductId
+  WHERE CP.CompanyId = @companyId;`;
+
+      return await this.DbManager.queryWithResult(query, params);
+    } catch (error) {
+      console.log(
+        "There is an error while adding product at ProductRepository. Error: ",
+        error
+      );
+    } finally {
+      await this.DbManager.closeDB(); // Veritabanı bağlantısını kapat
+    }
+  }
   async GetCompanyStocksByCompanyId(userCompanyId) {
     try {
       await this.DbManager.connectDB();
       let params = {companyId: userCompanyId};
       let query =`SELECT 
                     C.Name as 'Şirket İsmi',
+                    CP.ProductId AS 'Ürün Kodu',
                     P.ProductName AS 'Ürün İsmi',
                     P.Brand AS 'Marka',
                     P.Barcode AS 'Barkod No',
@@ -80,7 +104,10 @@ class ProductRepository {
                     FROM CompanyProducts AS CP WITH (NOLOCK)
                     INNER JOIN Companies AS C ON CP.CompanyId=C.CompanyId
                     INNER JOIN Products AS P on P.ProductId=CP.ProductId
-                    where CP.CompanyId=@companyId`;
+                    where CP.CompanyId=@companyId
+                    ORDER BY P.CreatedAt -- Sıralama ekleyebilirsiniz
+OFFSET (@pageNumber - 1) * @pageSize ROWS
+FETCH NEXT @pageSize ROWS ONLY;`;
 
       return await this.DbManager.queryWithResult(query, params);
     } catch (error) {
