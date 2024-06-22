@@ -29,14 +29,33 @@ document.addEventListener("DOMContentLoaded", function () {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
   
-        let result = await response.json();
-        console.log("Gelen Result: ", result);
-        if (result.success === false) {
-          alert(result.message);
+        let responseJson = await response.json();
+        console.log("Gelen Result: ", responseJson);
+        if (responseJson.success === false) {
+          Swal.fire({
+            icon: "error",
+            title: "Hata!",
+            text: responseJson.message,
+            confirmButtonText: "Tamam",
+            allowOutsideClick: false, // Dışarı tıklamayı kapat
+            allowEscapeKey: false, // ESC tuşunu kapat
+            allowEnterKey: true, // Enter tuşunu aç
+          }).then((result) => {
+            if (result.isConfirmed) {}
+          });
           return;
         }
-  
-        alert(`Katılım Kodu: ${result.inviteCode}`);
+        Swal.fire({
+          icon: "success",
+          title: "Katılım Kodu",
+          text: `Şirket Katılım Kodunuz: ${responseJson.inviteCode}`,
+          confirmButtonText: "Tamam",
+          allowOutsideClick: false, // Dışarı tıklamayı kapat
+          allowEscapeKey: false, // ESC tuşunu kapat
+          allowEnterKey: true, // Enter tuşunu aç
+        }).then((result) => {
+          if (result.isConfirmed) {}
+        });
   
       } catch (err) {
         console.log("İstek atılırken hata meydana geldi.", err);
