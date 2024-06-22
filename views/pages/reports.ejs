@@ -17,75 +17,7 @@
         <!-- <h1 style="text-align: center;">Report page</h1> -->
         <!-- <br> -->
 
-        <section class="ftco-section">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-md-6 text-center mb-5">
-                        <h1 class="">Eklediğim Ürünler</h1>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <% if (reports && reports.length > 0 ) { %>
-                            <div class="table-wrap">
-                                <table class="table table-responsive-xl">
-                                    <thead>
-                                        <tr>
-                                            <!-- <th>&nbsp;</th> -->
-                                            <th>Ürün İsmi</th>
-                                            <th>Şirket İsmi</th>
-                                            <th>Ürünü Ekleyen</th>
-                                            <th>İşlem Tipi</th>
-                                            <th>İşlem Tarihi</th>
-                                            <th>Önceki Miktar</th>
-                                            <th>Sonraki Miktar</th>
-                                            <th>&nbsp;</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-
-                                        <% reports.forEach(function(transaction) { %>
-                                            <tr class="alert" role="alert">
-                                                <td class="d-flex align-items-center">
-                                                    <%= transaction["Ürün İsmi"] %>
-                                                </td>
-                                                <td>
-                                                    <%= transaction["Şirket İsmi"] %>
-                                                </td>
-                                                <td>
-                                                    <%= transaction["Kullanıcı Ad Soyad"] %>
-                                                </td>
-                                                <td class="status"><span class="active">
-                                                        <%= transaction["İşlem Tipi"] %>
-                                                    </span></td>
-                                                <td>
-                                                    <%= new Date(transaction["İşlem Tarihi"]).toLocaleString() %>
-                                                </td>
-                                                <td>
-                                                    <%= transaction["Önceki Miktar"] %>
-                                                </td>
-                                                <td>
-                                                    <%= transaction["Güncel Miktar"] %>
-                                                </td>
-                                                <td>
-                                                    <button type="button" class="close" data-dismiss="alert"
-                                                        aria-label="Close">
-                                                        <span aria-hidden="true"><i class="fa fa-close"></i></span>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        <% }); %>
-                                    </tbody>
-                                </table>
-
-                        <% } else { %>
-                                    <h3 class="detail">Veri Yok</h3>
-                                <% } %>
-                            </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <%- include('../partials/table-partial', { reports:reports, header: "Eklediğim Ürünler"}) %>
 </body>
 <script src="ReportsScript.js"></script>
 

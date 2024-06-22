@@ -65,7 +65,33 @@ class ProductRepository {
       await this.DbManager.closeDB(); // Veritabanı bağlantısını kapat
     }
   }
+  async GetCompanyStocksByCompanyId(userCompanyId) {
+    try {
+      await this.DbManager.connectDB();
+      let params = {companyId: userCompanyId};
+      let query =`SELECT 
+                    C.Name as 'Şirket İsmi',
+                    P.ProductName AS 'Ürün İsmi',
+                    P.Brand AS 'Marka',
+                    P.Barcode AS 'Barkod No',
+                    P.Quantity AS 'Miktar',
+                    P.CreatedAt as 'İlk Giriş Tarihi'
 
+                    FROM CompanyProducts AS CP WITH (NOLOCK)
+                    INNER JOIN Companies AS C ON CP.CompanyId=C.CompanyId
+                    INNER JOIN Products AS P on P.ProductId=CP.ProductId
+                    where CP.CompanyId=@companyId`;
+
+      return await this.DbManager.queryWithResult(query, params);
+    } catch (error) {
+      console.log(
+        "There is an error while adding product at ProductRepository. Error: ",
+        error
+      );
+    } finally {
+      await this.DbManager.closeDB(); // Veritabanı bağlantısını kapat
+    }
+  }
   async AddProduct(productToAdd, userName) {
     try {
       await this.DbManager.connectDB();

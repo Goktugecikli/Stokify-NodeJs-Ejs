@@ -15,6 +15,16 @@ class ProductService {
       );
     }
   }
+  async GetCompanyStocksByCompanyId(userCompanyId){
+    try {
+      return await this.productRepository.GetCompanyStocksByCompanyId(userCompanyId);
+    } catch (err) {
+      console.log(
+        "There is an error while getting ProductOperationTypes at ProductService. Error",
+        err
+      );
+    }
+  }
   async GetProductOperationsTypes() {
     try {
       return await this.productRepository.GetProductOperationTypes();

@@ -126,7 +126,11 @@ app.get("/my-reports", requireAuth, async (req, res) =>{
   res.render("pages/reports",{reports: myReportsResultArr})
 });
 
-app.get("/stock", requireAuth, (req, res) => res.render("pages/stock"));
+app.get("/company-stocks", requireAuth, async (req, res) => {
+  let userCompanyId = req.session.userCompanyId;
+  let resultArr = await productService.GetCompanyStocksByCompanyId(userCompanyId);
+  res.render("pages/stock", {reports: resultArr})
+});
 
 app.get("/approvals", requireAuth, (req, res) => res.render("pages/approvals"));
 //#endregion ------------------------------------------------------------------------------------------------- //

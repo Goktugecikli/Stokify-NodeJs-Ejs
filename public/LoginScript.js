@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
           icon: 'success',
           title: 'Başarılı!',
           text: 'Giriş işlemi başarılı',
-          confirmButtonText: 'Sayfaya Gir',
+          confirmButtonText: 'Siteye Gir',
           allowOutsideClick: false, // Dışarı tıklamayı kapat
           allowEscapeKey: false, // ESC tuşunu kapat
           allowEnterKey: true // Enter tuşunu aç
