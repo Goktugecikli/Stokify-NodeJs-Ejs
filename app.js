@@ -85,7 +85,8 @@ app.get("/home", requireAuth, async (req, res) => {
     const username = req.session.userName;
     let user = await userService.IsExistUser(username);
     if (!user) {
-      return res.status(404).send("User not found");
+      res.render("pages/error",{message:"Kullanıcı bulunamadı"});
+      return;
     }
     res.render("pages/home", { user: user[0] });
   } catch (err) {
@@ -104,7 +105,8 @@ app.get("/user-profile", requireAuth, async (req, res) => {
     const userName = req.session.userName;
     let user = await userService.IsExistUser(userName);
     if (!user) {
-      return res.status(404).send("User not found");
+      res.render("pages/error",{message:"Kullanıcı bulunamadı"});
+      return;
     }
     let companyResultArr = await userService.GetCompanyByUserId(user[0].UserId);
     let company = null;
@@ -125,7 +127,7 @@ app.get("/my-reports", requireAuth, async (req, res) =>{
   let userId = req.session.userId;
   let totalPageCountArr = await productService.GetProductTransactionTotalPageByUserIdAndPageSize(userId,5);
   if(!totalPageCountArr || totalPageCountArr.length ===0)    {
-    res.status(404).send("sayfalandırmada hata meydana geldi.Lütfen yeniden deneyiniz");
+    es.render("pages/error",{message:"Sayfalandırma yapılırken hata meydana geldi"});
     return;
   }
   let resultArr = await productService.GetProductTransactionByUserId(userId,pageNumber,totalPageCountArr[0].TotalPages);
@@ -137,7 +139,7 @@ app.get("/company-stocks", requireAuth, async (req, res) => {
   let userCompanyId = req.session.userCompanyId;
   let totalPageCountArr = await productService.GetCompanyStockPageCountByCompanIdAndPageSize(userCompanyId, 5);
   if(!totalPageCountArr || totalPageCountArr.length ===0)    {
-      res.status(400).send("Bir şirkete kayıtlı değilsiniz. Lütfen önce kullanıcı profil ekranında var olan bir şirkete başvurunuz ya da şirketinizi kaydediniz.");
+    res.render("pages/error",{message:"Herhangi bir şirkete bağlı değilsiniz. Lüfen kullanıcı profil sayfasından şirket işlemlerinizi tamamlayınız."});  
       return;
     }
   let resultArr = await productService.GetCompanyStocksByCompanyId(userCompanyId,pageNumber,totalPageCountArr[0].TotalPages);
