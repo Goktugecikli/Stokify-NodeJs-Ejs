@@ -123,7 +123,6 @@ app.get("/stock-operations", requireAuth, (req, res) =>
 app.get("/my-reports", requireAuth, async (req, res) =>{
   let userId = req.session.userId;
   var myReportsResultArr = await productService.GetProductTransactionByUserId(userId);
-  console.log(JSON.stringify(myReportsResultArr));
   res.render("pages/reports",{reports: myReportsResultArr})
 });
 
