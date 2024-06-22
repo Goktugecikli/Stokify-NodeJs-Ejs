@@ -18,6 +18,39 @@ class ProductRepository {
       await this.DbManager.closeDB(); // Veritabanı bağlantısını kapat
     }
   }
+  async GetProductTransactionByUserId(userId) {
+    try {
+      await this.DbManager.connectDB();
+      let params = {
+        userId: userId,
+      };
+      let query = `SELECT 
+                      PT.ID as 'Transaction ID', 
+                      P.ProductName AS 'Ürün İsmi',
+                      U.Firstname + ' ' + U.LastName as 'Kullanıcı Ad Soyad',
+                      C.Name as 'Şirket İsmi',
+                      PTY.TypeName as 'İşlem Tipi',
+                      PT.TransactionDate as 'İşlem Tarihi',
+                      PT.PreviousQuantity as 'Önceki Miktar',
+                      PT.CurrentQuantity as 'Güncel Miktar'
+
+                      FROM ProductsTransactions AS PT WITH (NOLOCK)
+                      INNER JOIN Companies AS C ON PT.CompanyId=C.CompanyId
+                      INNER JOIN Products AS P on P.ProductId=PT.ProductId
+                      INNER JOIN ProductTransactionTypes as PTY on PTY.ID= PT.TrancationTypeId
+                      INNER JOIN Users as U ON u.UserId = pt.UserId
+
+                    where PT.UserId=@userId`;
+      return await this.DbManager.queryWithResult(query, params);
+    } catch (error) {
+      console.log(
+        "There is an error while adding product at ProductRepository. Error: ",
+        error
+      );
+    } finally {
+      await this.DbManager.closeDB(); // Veritabanı bağlantısını kapat
+    }
+  }
   async GetProductOperationTypes() {
     try {
       await this.DbManager.connectDB(); // Veritabanına bağlan
@@ -54,7 +87,14 @@ class ProductRepository {
       await this.DbManager.closeDB(); // Veritabanı bağlantısını kapat
     }
   }
-  async AddProductTransaction(productTableId, quantity,userId,companyId, transactionTypeId,previousQuantity){
+  async AddProductTransaction(
+    productTableId,
+    quantity,
+    userId,
+    companyId,
+    transactionTypeId,
+    previousQuantity
+  ) {
     try {
       await this.DbManager.connectDB();
       let params = {
@@ -63,10 +103,11 @@ class ProductRepository {
         userId: userId,
         companyId: companyId,
         transactionTypeId: transactionTypeId,
-        previousQuantity:previousQuantity
+        previousQuantity: previousQuantity,
       };
       console.log(`TransactionRepo: ${JSON.stringify(params)}`);
-      let query ="INSERT INTO ProductsTransactions (ProductId,UserId, CompanyId, TrancationTypeId, TransactionDate,CurrentQuantity, PreviousQuantity) VALUES ((Select ProductId from Products where Id=@productTableId), @userId, @companyId, @transactionTypeId, getDate(), @quantity, @previousQuantity);Select SCOPE_IDENTITY() as ID";
+      let query =
+        "INSERT INTO ProductsTransactions (ProductId,UserId, CompanyId, TrancationTypeId, TransactionDate,CurrentQuantity, PreviousQuantity) VALUES ((Select ProductId from Products where Id=@productTableId), @userId, @companyId, @transactionTypeId, getDate(), @quantity, @previousQuantity);Select SCOPE_IDENTITY() as ID";
       return await this.DbManager.queryWithResult(query, params);
     } catch (error) {
       console.log(

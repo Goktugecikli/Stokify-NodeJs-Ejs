@@ -5,7 +5,16 @@ class ProductService {
   constructor() {
     this.productRepository = new ProductRepository();
   }
-
+  async GetProductTransactionByUserId(userId){
+    try {
+      return await this.productRepository.GetProductTransactionByUserId(userId);
+    } catch (err) {
+      console.log(
+        "There is an error while getting ProductOperationTypes at ProductService. Error",
+        err
+      );
+    }
+  }
   async GetProductOperationsTypes() {
     try {
       return await this.productRepository.GetProductOperationTypes();

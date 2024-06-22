@@ -1,16 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/MainPage.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href='https://cdn.jsdelivr.net/npm/boxicons@2.0.5/css/boxicons.min.css' rel='stylesheet'>
-    <title>Sidebar menu</title>
+    <link rel="stylesheet" href="Reports.css">
+    <title>Stockify</title>
 </head>
+
 <body id="body">
     <%- include('../partials/sidebar') %>
-    <p>Report page</p>
-    <script src="/MainScript.js"></script>
+        <!-- <h1 style="text-align: center;">Report page</h1> -->
+        <!-- <br> -->
+
+        <section class="ftco-section">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-6 text-center mb-5">
+                        <h1 class="">Eklediğim Ürünler</h1>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <% if (reports && reports.length > 0 ) { %>
+                            <div class="table-wrap">
+                                <table class="table table-responsive-xl">
+                                    <thead>
+                                        <tr>
+                                            <!-- <th>&nbsp;</th> -->
+                                            <th>Ürün İsmi</th>
+                                            <th>Şirket İsmi</th>
+                                            <th>Ürünü Ekleyen</th>
+                                            <th>İşlem Tipi</th>
+                                            <th>İşlem Tarihi</th>
+                                            <th>Önceki Miktar</th>
+                                            <th>Sonraki Miktar</th>
+                                            <th>&nbsp;</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <% reports.forEach(function(transaction) { %>
+                                            <tr class="alert" role="alert">
+                                                <td class="d-flex align-items-center">
+                                                    <%= transaction["Ürün İsmi"] %>
+                                                </td>
+                                                <td>
+                                                    <%= transaction["Şirket İsmi"] %>
+                                                </td>
+                                                <td>
+                                                    <%= transaction["Kullanıcı Ad Soyad"] %>
+                                                </td>
+                                                <td class="status"><span class="active">
+                                                        <%= transaction["İşlem Tipi"] %>
+                                                    </span></td>
+                                                <td>
+                                                    <%= new Date(transaction["İşlem Tarihi"]).toLocaleString() %>
+                                                </td>
+                                                <td>
+                                                    <%= transaction["Önceki Miktar"] %>
+                                                </td>
+                                                <td>
+                                                    <%= transaction["Güncel Miktar"] %>
+                                                </td>
+                                                <td>
+                                                    <button type="button" class="close" data-dismiss="alert"
+                                                        aria-label="Close">
+                                                        <span aria-hidden="true"><i class="fa fa-close"></i></span>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        <% }); %>
+                                    </tbody>
+                                </table>
+
+                        <% } else { %>
+                                    <h3 class="detail">Veri Yok</h3>
+                                <% } %>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 </body>
+<script src="ReportsScript.js"></script>
+
 </html>

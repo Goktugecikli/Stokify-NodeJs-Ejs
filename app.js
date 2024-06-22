@@ -120,7 +120,12 @@ app.get("/stock-operations", requireAuth, (req, res) =>
   res.render("pages/stock-operations")
 );
 
-app.get("/reports", requireAuth, (req, res) => res.render("pages/reports"));
+app.get("/my-reports", requireAuth, async (req, res) =>{
+  let userId = req.session.userId;
+  var myReportsResultArr = await productService.GetProductTransactionByUserId(userId);
+  console.log(JSON.stringify(myReportsResultArr));
+  res.render("pages/reports",{reports: myReportsResultArr})
+});
 
 app.get("/stock", requireAuth, (req, res) => res.render("pages/stock"));
 
