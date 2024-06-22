@@ -88,10 +88,10 @@ class ProductRepository {
       await this.DbManager.closeDB(); // Veritabanı bağlantısını kapat
     }
   }
-  async GetCompanyStocksByCompanyId(userCompanyId) {
+  async GetCompanyStocksByCompanyId(userCompanyId, pageNumber, pageSize) {
     try {
       await this.DbManager.connectDB();
-      let params = {companyId: userCompanyId};
+      let params = {companyId: userCompanyId, pageNumber:pageNumber, pageSize:pageSize};
       let query =`SELECT 
                     C.Name as 'Şirket İsmi',
                     CP.ProductId AS 'Ürün Kodu',

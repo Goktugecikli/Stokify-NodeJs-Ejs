@@ -5,7 +5,7 @@ class ProductService {
   constructor() {
     this.productRepository = new ProductRepository();
   }
-  async GetProductTransactionByUserId(userId){
+  async GetProductTransactionByUserId(userId) {
     try {
       return await this.productRepository.GetProductTransactionByUserId(userId);
     } catch (err) {
@@ -15,9 +15,26 @@ class ProductService {
       );
     }
   }
-  async GetCompanyStocksByCompanyId(userCompanyId){
+  async GetCompanyStockPageCountByCompanIdAndPageSize(userCompanyId, pageSize) {
     try {
-      return await this.productRepository.GetCompanyStocksByCompanyId(userCompanyId);
+      return await this.productRepository.GetCompanyStockPageCountByCompanIdAndPageSize(
+        userCompanyId,
+        pageSize
+      );
+    } catch (err) {
+      console.log(
+        "There is an error while getting ProductOperationTypes at ProductService. Error",
+        err
+      );
+    }
+  }
+  async GetCompanyStocksByCompanyId(userCompanyId, pageNumber, pageSize) {
+    try {
+      return await this.productRepository.GetCompanyStocksByCompanyId(
+        userCompanyId,
+        pageNumber,
+        pageSize
+      );
     } catch (err) {
       console.log(
         "There is an error while getting ProductOperationTypes at ProductService. Error",
@@ -209,8 +226,12 @@ class ProductService {
           };
         }
 
-        console.log(`${JSON.stringify(product[0].Id)}, ${resultQuantity}, ${userId}, ${userCompanyId}`);
-        
+        console.log(
+          `${JSON.stringify(
+            product[0].Id
+          )}, ${resultQuantity}, ${userId}, ${userCompanyId}`
+        );
+
         try {
           var transactionResultArr = await this.AddProductTransaction(
             product[0].Id,
@@ -226,7 +247,10 @@ class ProductService {
           }
         } catch (transactionError) {
           console.error("Transaction Error: ", transactionError);
-          return { success: false, message: "Transaction sırasında bir hata meydana geldi." };
+          return {
+            success: false,
+            message: "Transaction sırasında bir hata meydana geldi.",
+          };
         }
         //#endregion
       }

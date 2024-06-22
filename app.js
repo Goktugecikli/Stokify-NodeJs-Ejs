@@ -127,9 +127,19 @@ app.get("/my-reports", requireAuth, async (req, res) =>{
 });
 
 app.get("/company-stocks", requireAuth, async (req, res) => {
+  let pageNumber = req.query.pageNumber || 1; 
+  if(!pageNumber || pageNumber === "")    {
+    pageNumber=1;
+  }
+  console.log(pageNumber);
   let userCompanyId = req.session.userCompanyId;
-  let resultArr = await productService.GetCompanyStocksByCompanyId(userCompanyId);
-  res.render("pages/stock", {reports: resultArr})
+  let totalPageCountArr = await productService.GetCompanyStockPageCountByCompanIdAndPageSize(userCompanyId, 5);
+  if(!totalPageCountArr || totalPageCountArr.length ===0)    {
+      res.status(400).send("Sayfalandırmada bir hata meydana geldi.")
+    }
+    console.log(JSON.stringify(totalPageCountArr));
+  let resultArr = await productService.GetCompanyStocksByCompanyId(userCompanyId,pageNumber,totalPageCountArr[0].TotalPages);
+  res.render("pages/stock", {reports: resultArr, totalPages:totalPageCountArr[0].TotalPages})
 });
 
 app.get("/approvals", requireAuth, (req, res) => res.render("pages/approvals"));
