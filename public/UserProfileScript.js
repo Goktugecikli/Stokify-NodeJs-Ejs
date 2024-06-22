@@ -14,7 +14,25 @@ document.addEventListener("DOMContentLoaded", function () {
   let registerButton = document.getElementById("registerCompany");
   if (registerButton) {
     registerButton.addEventListener("click", async function () {
-      window.location.href = "/register-company";
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 1000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        }
+      });
+      Toast.fire({
+        icon: "success",
+        title: "Şirket Kayıt Ekranına Yönlendiriliyorsunuz..."
+      });
+
+      setTimeout(function () {
+        window.location.href = "/register-company";
+      }, 1005);
     });
   }
   let getInviteCodeButton = document.getElementById("getInviteCode");
