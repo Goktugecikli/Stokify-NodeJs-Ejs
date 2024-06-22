@@ -125,7 +125,8 @@ app.get("/my-reports", requireAuth, async (req, res) =>{
   let userId = req.session.userId;
   let totalPageCountArr = await productService.GetProductTransactionTotalPageByUserIdAndPageSize(userId,5);
   if(!totalPageCountArr || totalPageCountArr.length ===0)    {
-    res.status(400).send("Sayfalandırmada bir hata meydana geldi.")
+    res.status(404).send("sayfalandırmada hata meydana geldi.Lütfen yeniden deneyiniz");
+    return;
   }
   let resultArr = await productService.GetProductTransactionByUserId(userId,pageNumber,totalPageCountArr[0].TotalPages);
   res.render("pages/reports",{reports: resultArr, totalPages:totalPageCountArr[0].TotalPages})
@@ -136,7 +137,8 @@ app.get("/company-stocks", requireAuth, async (req, res) => {
   let userCompanyId = req.session.userCompanyId;
   let totalPageCountArr = await productService.GetCompanyStockPageCountByCompanIdAndPageSize(userCompanyId, 5);
   if(!totalPageCountArr || totalPageCountArr.length ===0)    {
-      res.status(400).send("Sayfalandırmada bir hata meydana geldi.")
+      res.status(400).send("Bir şirkete kayıtlı değilsiniz. Lütfen önce kullanıcı profil ekranında var olan bir şirkete başvurunuz ya da şirketinizi kaydediniz.");
+      return;
     }
   let resultArr = await productService.GetCompanyStocksByCompanyId(userCompanyId,pageNumber,totalPageCountArr[0].TotalPages);
   res.render("pages/stock", {reports: resultArr, totalPages:totalPageCountArr[0].TotalPages})
