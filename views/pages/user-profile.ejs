@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,75 +10,60 @@
         integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href='https://cdn.jsdelivr.net/npm/boxicons@2.0.5/css/boxicons.min.css' rel='stylesheet'>
-      <!-- SwalFire -->
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-       <!-- SwalFire END -->
-    <title>Stockify</title>
+    <!-- SwalFire -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- SwalFire END -->
+    <title>Profile</title>
 </head>
 
 <body id="body">
     <%- include('../partials/sidebar') %>
-        <div class="page_container">
-            <h1 class="detail">Kullanıcı Profil Sayfası</h1>
-            <br>
+    <div class="page_container">
+        <h1 class="detail">Kullanıcı Profil Sayfası</h1>
+        <br>
+        <div class="company__info">
+            <% if (companyData ) { %>
             <div class="company__info">
-                <!-- <div class="company__title">
-                <div class="company__pic">
-                    <img src="/company_pp.jpg" class="company__pp" alt="">
-                </div> -->
-                <div class="detail">
-                    <% if (companyData ) { %>
-                        <div class="company__info">
-                            <div class="">
-                                <!-- <div class="company__pic">
-                                    <img src="/company_pp.jpg" class="company__pp" alt="">
-                                </div> -->
-                                <div class="company__name">
-                                    <h1 style="color: rgb(151, 9, 9); ">Şirket İsmi</h1>
-                                    <hr>
-                                    <div class="">
-                                        <p class="user_details_value">
-                                            <%= companyData.Name %>
-                                        </p>
-                                    </div>
-                                    <br>
-                                    <div class="button-container">
-                                        <div class="button-wrapper">
-                                            <button class="button button-green" id="getInviteCode">Katılım Kodu Al</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                <div class="company__name">
+                    <h1 style="color: rgb(151, 9, 9); ">Şirket İsmi</h1>
+                    <hr>
+                    <div class="user_details_box">
+                        <p class="user_details_value">
+                            <%= companyData.Name %>
+                        </p>
+                    </div>
+                    <br>
+                    <div class="button-container">
+                        <div class="button-wrapper" >
+                            <button class="button button-green" id="getInviteCode">Katılım Kodu Al</button>
                         </div>
-                        <% } else { %>
-                            <div class="no-company-info">
-                                <hr>
-                                <p>Herhangi bir şirkete kayıtlı değilsiniz</p>
-                                <hr>
-                                <div class="button-container">
-                                    <div class="button-wrapper">
-                                        <button class="button button-green" id="registerCompany">Şirketinizi
-                                            Kaydedin</button>
-                                    </div>
-                                    <div class="button-wrapper">
-                                        <button class="button button-blue" id="joinButton">Şirkete katılın</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <% } %>
+                    </div>
                 </div>
             </div>
+            <% } else { %>
+            <div class="no-company-info">
+                <hr>
+                <p>Herhangi bir şirkete kayıtlı değilsiniz</p>
+                <hr>
+                <div class="button-container">
+                    <div class="button-wrapper">
+                        <button class="button button-green" id="registerCompany">Şirketinizi Kaydedin</button>
+                    </div>
+                    <div class="button-wrapper">
+                        <button class="button button-blue" id="joinButton">Şirkete katılın</button>
+                    </div>
+                </div>
+            </div>
+            <% } %>
         </div>
         <div class="company__details">
             <h1 style="">Kullanıcı Bilgileri</h1>
             <br>
-
             <div class="detail">
                 <h2 class="user_details_label">İsim</h2>
                 <span class="user_details_value">
-                    <%= user.Firstname %>
-                        <%= user.LastName %>
+                    <%= user.Firstname %> <%= user.LastName %>
                 </span>
             </div>
             <div class="detail">
@@ -97,13 +83,13 @@
                 <div class="password-container">
                     <input type="password" id="userPassword" class="user_details_value password-input"
                         value="<%= user.Password %>" readonly>
-                    <button class="toggle-password" onclick="togglePassword()">Şifreyi Göster</button>
+                    <button class="toggle-password button button-blue" id="showPassword"  onclick="togglePassword()">Şifreyi Göster</button>
                 </div>
             </div>
         </div>
-        </div>
-        <!-- MAIN JS -->
-        <script src="/UserProfileScript.js"></script>
+    </div>
+    <!-- MAIN JS -->
+    <script src="/UserProfileScript.js"></script>
 </body>
 
 </html>

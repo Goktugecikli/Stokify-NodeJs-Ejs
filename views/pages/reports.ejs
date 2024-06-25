@@ -9,12 +9,12 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href='https://cdn.jsdelivr.net/npm/boxicons@2.0.5/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="Reports.css">
-    <title>Stockify</title>
+    <title>Reports</title>
 </head>
 
 <body id="body">
     <%- include('../partials/sidebar') %>
-        <%- include('../partials/table-partial', { reports:reports, header: "Eklediğim Ürünler", totalPages:totalPages}) %>
+        <%- include('../partials/table-partial', { reports:reports, header: "İşlem Yaptığım Ürünler", totalPages:totalPages}) %>
 </body>
 <script src="ReportsScript.js"></script>
 

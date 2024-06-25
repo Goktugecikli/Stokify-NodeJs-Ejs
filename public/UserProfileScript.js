@@ -1,12 +1,12 @@
 function togglePassword() {
   var passwordInput = document.getElementById("userPassword");
-  var toggleButton = document.querySelector(".toggle-password");
+  var toggleButton = document.getElementById("showPassword");
   if (passwordInput.type === "password") {
     passwordInput.type = "text";
-    toggleButton.textContent = "Hide";
+    toggleButton.textContent = "Gizle";
   } else {
     passwordInput.type = "password";
-    toggleButton.textContent = "Show";
+    toggleButton.textContent = "Şifreyi Göster";
   }
 }
 
@@ -127,7 +127,19 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log(result);
 
         if (result.success === false) {
-          alert(result.message);
+          Swal.fire({
+            icon: 'error',
+            title: 'Hata!',
+            text: result.message,
+            confirmButtonText: 'Anladım.',
+            allowOutsideClick: false, // Dışarı tıklamayı kapat
+            allowEscapeKey: false, // ESC tuşunu kapat
+            allowEnterKey: true // Enter tuşunu aç
+          }).then((result) => {
+            if (result.isConfirmed) {
+             
+            }
+          });
         }
 
         const Toast = Swal.mixin({
@@ -151,7 +163,19 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 3005);
       } catch (error) {
         console.error("Fetch error:", error);
-        alert("An error occurred while joining the company.");
+        Swal.fire({
+          icon: 'error',
+          title: 'Hata!',
+          text: "Şirkete katılırken bir hata meydana geldi",
+          confirmButtonText: 'Anladım.',
+          allowOutsideClick: false, // Dışarı tıklamayı kapat
+          allowEscapeKey: false, // ESC tuşunu kapat
+          allowEnterKey: true // Enter tuşunu aç
+        }).then((result) => {
+          if (result.isConfirmed) {
+           
+          }
+        });
       }
     });
   }

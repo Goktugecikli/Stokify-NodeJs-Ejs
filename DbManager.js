@@ -2,7 +2,7 @@ import sql  from "mssql/msnodesqlv8.js";
 
 
 const dbConfig = {
-    server: 'SKY-PC',
+    server: 'DESKTOP-NDQN894',
     database: 'StockTracking',
     user: 'sa',
     password: '12345678',

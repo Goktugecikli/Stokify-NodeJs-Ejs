@@ -97,6 +97,45 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
+function validateEmailFunction(email) { 
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Basit bir email regex'i
+
+  if (!emailRegex.test(email)) {
+      return false;
+  }
+
+  const allowedDomains = ["gmail.com", "hotmail.com"]; // Kabul edilebilir uzantılar
+
+  const domain = email.split('@')[1]; // Email adresinden domain kısmını al
+
+  if (!allowedDomains.includes(domain)) {
+      return false;
+  }
+
+  return true;
+}
+
+function validatePasswordFunction (password) {
+
+  if (password.length < 8) {
+      return false;
+  }
+
+  if (!/[a-z]/.test(password)) {
+      return false;
+  }
+
+  if (!/[A-Z]/.test(password)) {
+      return false;
+  }
+
+  if (!/\d/.test(password)) {
+      return false;
+  }
+
+  return true;
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   var registerBtn = document.getElementById("register");
 
@@ -135,6 +174,33 @@ document.addEventListener("DOMContentLoaded", function () {
       }).then((result) => {
         if (result.isConfirmed) {}
       });
+      return;
+    }
+
+    let validateEmail = validateEmailFunction(email);
+    if(!validateEmail){
+      Swal.fire({
+        icon: 'error',
+        title: 'Uyarı!',
+        text: 'Lütfen mail adresinizin doğruluğunu kontrol edin',
+        confirmButtonText: 'Anladım',
+        allowOutsideClick: false, // Dışarı tıklamayı kapat
+        allowEscapeKey: false, // ESC tuşunu kapat
+        allowEnterKey: true // Enter tuşunu aç
+      })
+      return;
+    }
+    let validatePassword = validatePasswordFunction(password);
+    if(!validatePassword) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Uyarı!',
+        text: 'Şifre en az 8 karakter uzunluğunda olmalı, en az bir büyük harf, bir küçük harf ve bir rakam içermelidir',
+        confirmButtonText: 'Anladım',
+        allowOutsideClick: false, // Dışarı tıklamayı kapat
+        allowEscapeKey: false, // ESC tuşunu kapat
+        allowEnterKey: true // Enter tuşunu aç
+      })
       return;
     }
     console.log(JSON.stringify({ firstName, lastName, email, username: userName, password }));

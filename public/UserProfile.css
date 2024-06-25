@@ -1,187 +1,102 @@
-/* @import url('SideBar.css'); */
+/* UserProfile.css */
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+}
+
 .page_container {
-  max-width: 1200px;
+  max-width: 800px;
   margin: 0 auto;
   padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.company__info {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.company__title {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.company__pic {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  overflow: hidden;
-  margin-bottom: 10px;
-}
-
-.company__pic img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.company__name p {
-  font-size: 24px;
-  font-weight: bold;
-  margin: 0;
-}
-
-.company__details {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  width: 100%;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .detail {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  border: 1px solid #ddd; /* Hafif bir border ekledim */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Daha belirgin bir gölge ekledim */
+  margin-bottom: 20px;
 }
 
-.company_details_label {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.company_details_value {
-  font-size: 16px;
-  color: #333;    
-}
-
-.password-container {
-  display: flex;
-  align-items: center;
-  justify-content: center; /* Şifre kutusunu ortaladım */
-}
-
-.password-input {
-  border: none;
-  background-color: transparent;
-  font-size: 16px;
-  color: #333;
-  margin-right: 10px;
-}
-
-.toggle-password {
-  border: none;
-  background-color: #4e9c83; /* Rengini değiştirdim */
-  color: white;
-  padding: 5px 10px;
-  cursor: pointer;
-  border-radius: 15px; /* Border radius ekledim */
-}
-
-.toggle-password:hover {
-  background-color: #3e7f68; /* Hover durumunda rengini değiştirdim */
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .company__details {
-      grid-template-columns: 1fr;
-  }
-
-  .company__pic {
-      width: 120px;
-      height: 120px;
-  }
-
-  .company__name p {
-      font-size: 20px;
-  }
-
-  .detail {
-      padding: 15px;
-  }
-}
-
-@media (max-width: 480px) {
-  .company__pic {
-      width: 100px;
-      height: 100px;
-  }
-
-  .company__name p {
-      font-size: 18px;
-  }
-
-  .detail {
-      padding: 10px;
-  }
-
-  .company_details_label {
-      font-size: 16px;
-  }
-
-  .company_details_value {
-      font-size: 14px;
-  }
-} 
-
-
-
-.company_details_value {
+.company__info {
   padding: 5px;
-  display: block;
-  /* background-color: #f7f7f780; */
-  /* border: 1px solid #00000039; */
-  border-radius: 10px;
-  /* box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.316); */
-} 
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  /* margin-bottom: 5px; */
+  margin-top: 0px;
+}
+
+.company__name {
+  margin-bottom: 10px;
+}
+
+.company__name h1 {
+  font-size: 24px;
+  margin: 0;
+  padding: 0;
+}
+
+.company__name hr {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  border: 0;
+  border-top: 1px solid #ccc;
+}
 
 .button-container {
   display: flex;
-  flex-direction: column;
-  gap: 20px;
+  justify-content: space-between;
 }
 
 .button-wrapper {
-  width: 100%;
+  flex: 1;
+  margin-right: 10px;
 }
 
 .button {
-  width: 100%;
-  padding: 15px 30px;
-  font-size: 16px;
-  font-weight: bold;
-  color: white;
+  padding: 10px 20px;
   border: none;
-  border-radius: 25px;
+  border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
 .button-green {
-  background-color: #28a745;
-}
-
-.button-green:hover {
-  background-color: #218838;
-  transform: scale(1.05);
+  background-color: #4caf50;
+  color: white;
 }
 
 .button-blue {
-  background-color: #007bff;
+  background-color: #2196f3;
+  color: white;
 }
 
-.button-blue:hover {
-  background-color: #0056b3;
-  transform: scale(1.05);
+.user_details_label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+.user_details_box{
+  margin: auto;
+}
+
+.user_details_value {
+  display: block;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.password-container {
+  position: relative;
+}
+
+.password-input {
+  padding-right: 30px;
+}
+
+.toggle-password {
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
 }

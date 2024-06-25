@@ -21,7 +21,8 @@ class ProductRepository {
   async GetProductTransactionTotalPageByUserIdAndPageSize(userId, pageSize) {
     try {
       await this.DbManager.connectDB();
-      let params = { userId: userId, pageSize: pageSize };
+      let params = { userId: userId, pageSize: 1 };
+      console.log("sky params : " + JSON.stringify(params));
       let query = `SELECT CEILING(COUNT(*) * 1.0 / @pageSize) AS TotalPages
                         FROM ProductsTransactions AS PT WITH (NOLOCK)
                       INNER JOIN Companies AS C ON PT.CompanyId=C.CompanyId
@@ -31,7 +32,9 @@ class ProductRepository {
 
                     where PT.UserId=@userId`;
 
-      return await this.DbManager.queryWithResult(query, params);
+      let result=  await this.DbManager.queryWithResult(query, params);
+      console.log(JSON.stringify(result));
+      return result;
     } catch (error) {
       console.log(
         "There is an error while adding product at ProductRepository. Error: ",
@@ -45,6 +48,7 @@ class ProductRepository {
     try {
       await this.DbManager.connectDB();
       let params = {userId: userId,pageNumber:pageNumber, pageSize:pageSize};
+      console.log(JSON.stringify(params));
       let query = `SELECT 
                       PT.ID as 'Transaction ID', 
                       P.ProductName AS 'Ürün İsmi',

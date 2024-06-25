@@ -9,7 +9,19 @@ async function handleFormSubmit(event) {
 
   let companyNameInput = document.getElementById("Name");
   if (!companyNameInput.value) {
-    alert("Lütfen form alanlarını doldurunuz.");
+    Swal.fire({
+      icon: 'warning',
+      title: 'Uyarı!',
+      text: "Lütfen şirket isim alanını doldurunuz.",
+      confirmButtonText: 'Anladım.',
+      allowOutsideClick: false, // Dışarı tıklamayı kapat
+      allowEscapeKey: false, // ESC tuşunu kapat
+      allowEnterKey: true // Enter tuşunu aç
+    }).then((result) => {
+      if (result.isConfirmed) {
+       
+      }
+    });
     companyNameInput.classList.add("error");
     return;
   }
@@ -29,19 +41,54 @@ async function handleFormSubmit(event) {
     const result = await response.json();
 
     if (result.success === false) {
-      alert(result.message);
+    
+      Swal.fire({
+        icon: 'error',
+        title: 'Hata!',
+        text: result.message,
+        confirmButtonText: 'Anladım.',
+        allowOutsideClick: false, // Dışarı tıklamayı kapat
+        allowEscapeKey: false, // ESC tuşunu kapat
+        allowEnterKey: true // Enter tuşunu aç
+      }).then((result) => {
+        if (result.isConfirmed) {
+         
+        }
+      });
       return;
     }
 
-    alert(
-      "Şirket kayıt olma işlemi başarılı. yönlendirme işlemi yapılacaktır."
-    );
+    const Toast = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 2000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      }
+    });
+    Toast.fire({
+      icon: "success",
+      title: "Şirket kayıt olma işlemi başarılı. yönlendirme işlemi yapılacaktır."
+    });
 
     setTimeout(function () {
       window.location.href = result.redirectUrl;
-    }, 2000);
+    }, 2005);
   } catch (error) {
     console.error("Fetch error:", error);
-    alert("An error occurred while regsitering the company.");
+    Swal.fire({
+      icon: "error",
+      title: "Hata!",
+      text: "Şirket kaydedilirken bir hata oluştu.",
+      confirmButtonText: "Tamam",
+      allowOutsideClick: false, // Dışarı tıklamayı kapat
+      allowEscapeKey: false, // ESC tuşunu kapat
+      allowEnterKey: true, // Enter tuşunu aç
+    }).then((result) => {
+      if (result.isConfirmed) {}
+    });
   }
 }

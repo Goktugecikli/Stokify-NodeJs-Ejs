@@ -125,12 +125,13 @@ app.get("/stock-operations", requireAuth, (req, res) =>
 app.get("/my-reports", requireAuth, async (req, res) =>{
   let pageNumber = req.query.pageNumber || 1; 
   let userId = req.session.userId;
-  let totalPageCountArr = await productService.GetProductTransactionTotalPageByUserIdAndPageSize(userId,5);
+  let totalPageCountArr = await productService.GetProductTransactionTotalPageByUserIdAndPageSize(userId,10);
   if(!totalPageCountArr || totalPageCountArr.length ===0)    {
-    es.render("pages/error",{message:"Sayfalandırma yapılırken hata meydana geldi"});
+    res.render("pages/error",{message:"Sayfalandırma yapılırken hata meydana geldi"});
     return;
   }
-  let resultArr = await productService.GetProductTransactionByUserId(userId,pageNumber,totalPageCountArr[0].TotalPages);
+  let resultArr = await productService.GetProductTransactionByUserId(userId,pageNumber,totalPageCountArr[0].TotalPages || 1);
+  console.log(JSON.stringify(totalPageCountArr));
   res.render("pages/reports",{reports: resultArr, totalPages:totalPageCountArr[0].TotalPages})
 });
 

@@ -1,3 +1,8 @@
+    <!-- SwalFire -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- SwalFire END -->
+
 <section class="ftco-section">
     <div class="container">
         <div class="row justify-content-center">
@@ -61,18 +66,33 @@
 </script> -->
 
 
-<!-- <script>
+<script>
     function handleRowClick(event) {
-        // Tıklanan çarpının bulunduğu satırı bul
-        const row = event.target.closest('tr');
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+        Toast.fire({
+          icon: "info",
+          title: "Bu özellik en yakın zamanda gelecek :)"
+        });
+        // // Tıklanan çarpının bulunduğu satırı bul
+        // const row = event.target.closest('tr');
         
-        // Satırdaki hücrelerin içeriklerini al
-        const cells = row.querySelectorAll('td');
-        const rowData = Array.from(cells).map(cell => cell.innerText);
+        // // Satırdaki hücrelerin içeriklerini al
+        // const cells = row.querySelectorAll('td');
+        // const rowData = Array.from(cells).map(cell => cell.innerText);
 
-        // Çarpıya tıklanılan satırdaki bilgileri işle
-        console.log(rowData);
+        // // Çarpıya tıklanılan satırdaki bilgileri işle
+        // console.log(rowData);
         
-        // Ekstra: Satırdaki verileri başka bir işleme gönderebilirsiniz
+        // // Ekstra: Satırdaki verileri başka bir işleme gönderebilirsiniz
     }
-</script> -->
+</script>
