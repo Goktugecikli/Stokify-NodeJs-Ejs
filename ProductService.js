@@ -7,7 +7,10 @@ class ProductService {
   }
   async GetProductTransactionTotalPageByUserIdAndPageSize(userId, pageSize) {
     try {
-      return await this.productRepository.GetProductTransactionTotalPageByUserIdAndPageSize(userId, pageSize);
+      return await this.productRepository.GetProductTransactionTotalPageByUserIdAndPageSize(
+        userId,
+        pageSize
+      );
     } catch (err) {
       console.log(
         "There is an error while getting ProductOperationTypes at ProductService. Error",
@@ -15,9 +18,13 @@ class ProductService {
       );
     }
   }
-  async GetProductTransactionByUserId(userId,pageNumber, pageSize) {
+  async GetProductTransactionByUserId(userId, pageNumber, pageSize) {
     try {
-      return await this.productRepository.GetProductTransactionByUserId(userId,pageNumber,pageSize);
+      return await this.productRepository.GetProductTransactionByUserId(
+        userId,
+        pageNumber,
+        pageSize
+      );
     } catch (err) {
       console.log(
         "There is an error while getting ProductOperationTypes at ProductService. Error",
@@ -25,7 +32,10 @@ class ProductService {
       );
     }
   }
-  async GetCompanyStockPageCountByCompanyIdAndPageSize(userCompanyId, pageSize) {
+  async GetCompanyStockPageCountByCompanyIdAndPageSize(
+    userCompanyId,
+    pageSize
+  ) {
     try {
       return await this.productRepository.GetCompanyStockPageCountByCompanyIdAndPageSize(
         userCompanyId,
@@ -131,6 +141,23 @@ class ProductService {
     userCompanyId,
     companyService
   ) {
+    //#region Business Rules
+    let operationTypeArr = await this.productRepository.GetOperationTypeById(
+      productToAdd.operationType
+    );
+    if (!operationTypeArr || operationTypeArr.length === 0) {
+      return {
+        success: false,
+        message: `Operation type ${productToAdd.operationType} not found.`,
+      };
+    }
+    if (operationTypeArr[0].IsIncrease == false) {
+      return {
+        success: false,
+        message: "Stokta olmayan ürün çıkışı yapılamaz.",
+      };
+    }
+    //#region
     let resultToAdd = await this.productRepository.CreateProduct(
       productToAdd,
       userId,

@@ -91,19 +91,22 @@ async function handleFormSubmit(event) {
   // if (!response.ok) {
   //   throw new Error("HTTP error " + response.status);
   // }
-  let responseJSON = await response.json();
-  // let resultResponse = JSON.parse(responseJSON);
-  if (responseJSON.success === false) {
+  let responseJson = await response.json();
+  let responseParse = JSON.parse(responseJson);
+  if (responseParse.success === false) {
     Swal.fire({
       icon: "error",
       title: "Hata!",
-      text: responseJSON.message,
-      confirmButtonText: "Girişe Yönlendir",
+      text: responseParse.message,
+      confirmButtonText: "Anladım",
       allowOutsideClick: false, // Dışarı tıklamayı kapat
       allowEscapeKey: false, // ESC tuşunu kapat
       allowEnterKey: true, // Enter tuşunu aç
     }).then((result) => {
       if (result.isConfirmed) {
+        let operationType = document.getElementById("operationType");
+        operationType.classList.add("error");
+
       }
     });
     return;
@@ -111,8 +114,8 @@ async function handleFormSubmit(event) {
   Swal.fire({
     icon: "success",
     title: "Başarılı!",
-    text: responseJSON.message,
-    confirmButtonText: "Tamam",
+    text: responseParse.message,
+    confirmButtonText: "Teşekkürler",
     allowOutsideClick: false, // Dışarı tıklamayı kapat
     allowEscapeKey: false, // ESC tuşunu kapat
     allowEnterKey: true, // Enter tuşunu aç
