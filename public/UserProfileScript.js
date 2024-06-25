@@ -12,37 +12,53 @@ function togglePassword() {
 async function ChangePassword(event) {
   // event.preventDefault();
   const { value: formValues } = await Swal.fire({
-    icon:"info",
+    icon: "info",
     title: "Şifre Değiştir",
     html: `
       <h3> Lütfen yeni şifrenizi Giriniz</h3>
-      <input id="p1" class="swal2-input">
-      <input id="p2" class="swal2-input">
+      <input type="password" id="p1" class="swal2-input">
+      <input type="password" id="p2" class="swal2-input">
     `,
     focusConfirm: false,
     preConfirm: () => {
       var password = document.getElementById("p1").value;
       var passwordCheck = document.getElementById("p2").value;
       let success = true;
-      console.log(`Gelen : ${password} - ${passwordCheck}`);
-      if(password !== passwordCheck){
-        success=false;
+      let message = "";
+      if (password !== passwordCheck) {
+        success = false;
+        message="Şifreler birbiri ile uyuşmamaktadır.";
       }
-      return [
-        success,
-        password,
-        passwordCheck
-      ];
-    }
+      if (success) {
+        if (password.length < 8) {
+          success = false;
+        }
+
+        if (!/[a-z]/.test(password)) {
+          success = false;
+        }
+
+        if (!/[A-Z]/.test(password)) {
+          success = false;
+        }
+
+        if (!/\d/.test(password)) {
+          success = false;
+        }
+
+        if(!success){
+          message="Şifre en az 8 karakter uzunluğunda olmalı, en az bir büyük harf, bir küçük harf ve bir rakam içermelidir";
+        }
+      }
+      return [success, password, passwordCheck, message];
+    },
   });
   if (formValues) {
-    console.log(JSON.stringify(formValues));
-    if(formValues[0]=== false)
-    {
+    if (formValues[0] === false) {
       Swal.fire({
         icon: "error",
         title: "Hata!",
-        text: "Şifreler uyuşmamaktadır",
+        text: formValues[3],
         confirmButtonText: "Tamam",
         allowOutsideClick: false, // Dışarı tıklamayı kapat
         allowEscapeKey: false, // ESC tuşunu kapat
@@ -64,7 +80,6 @@ async function ChangePassword(event) {
       }
 
       let responseJson = await response.json();
-      console.log("Gelen Result: ", responseJson);
       if (responseJson.success === false) {
         Swal.fire({
           icon: "error",
@@ -90,7 +105,8 @@ async function ChangePassword(event) {
       });
       Toast.fire({
         icon: "success",
-        title: "Şifre başarıyla değiştirildi. Login ekranına yönlendiriliyorsunuz.",
+        title:
+          "Şifre başarıyla değiştirildi. Login ekranına yönlendiriliyorsunuz.",
       });
 
       setTimeout(function () {
@@ -99,8 +115,6 @@ async function ChangePassword(event) {
     } catch (err) {
       console.log("İstek atılırken hata meydana geldi.", err);
     }
-
-
   }
 }
 document.addEventListener("DOMContentLoaded", function () {
