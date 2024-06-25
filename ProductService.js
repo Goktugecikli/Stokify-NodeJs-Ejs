@@ -25,9 +25,9 @@ class ProductService {
       );
     }
   }
-  async GetCompanyStockPageCountByCompanIdAndPageSize(userCompanyId, pageSize) {
+  async GetCompanyStockPageCountByCompanyIdAndPageSize(userCompanyId, pageSize) {
     try {
-      return await this.productRepository.GetCompanyStockPageCountByCompanIdAndPageSize(
+      return await this.productRepository.GetCompanyStockPageCountByCompanyIdAndPageSize(
         userCompanyId,
         pageSize
       );

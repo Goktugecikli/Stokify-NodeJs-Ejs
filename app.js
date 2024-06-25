@@ -124,26 +124,27 @@ app.get("/stock-operations", requireAuth, (req, res) =>
 
 app.get("/my-reports", requireAuth, async (req, res) =>{
   let pageNumber = req.query.pageNumber || 1; 
+  const pageSize = 10;
   let userId = req.session.userId;
-  let totalPageCountArr = await productService.GetProductTransactionTotalPageByUserIdAndPageSize(userId,10);
+  let totalPageCountArr = await productService.GetProductTransactionTotalPageByUserIdAndPageSize(userId,pageSize);
   if(!totalPageCountArr || totalPageCountArr.length ===0)    {
     res.render("pages/error",{message:"Sayfalandırma yapılırken hata meydana geldi"});
     return;
   }
-  let resultArr = await productService.GetProductTransactionByUserId(userId,pageNumber,totalPageCountArr[0].TotalPages || 1);
-  console.log(JSON.stringify(totalPageCountArr));
+  let resultArr = await productService.GetProductTransactionByUserId(userId,pageNumber,pageSize);
   res.render("pages/reports",{reports: resultArr, totalPages:totalPageCountArr[0].TotalPages})
 });
 
 app.get("/company-stocks", requireAuth, async (req, res) => {
   let pageNumber = req.query.pageNumber || 1; 
+  const pageSize = 10;
   let userCompanyId = req.session.userCompanyId;
-  let totalPageCountArr = await productService.GetCompanyStockPageCountByCompanIdAndPageSize(userCompanyId, 5);
+  let totalPageCountArr = await productService.GetCompanyStockPageCountByCompanyIdAndPageSize(userCompanyId, pageSize);
   if(!totalPageCountArr || totalPageCountArr.length ===0)    {
     res.render("pages/error",{message:"Herhangi bir şirkete bağlı değilsiniz. Lüfen kullanıcı profil sayfasından şirket işlemlerinizi tamamlayınız."});  
       return;
     }
-  let resultArr = await productService.GetCompanyStocksByCompanyId(userCompanyId,pageNumber,totalPageCountArr[0].TotalPages);
+  let resultArr = await productService.GetCompanyStocksByCompanyId(userCompanyId,pageNumber,pageSize);
   res.render("pages/stock", {reports: resultArr, totalPages:totalPageCountArr[0].TotalPages})
 });
 
