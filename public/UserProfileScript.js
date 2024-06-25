@@ -14,6 +14,9 @@ async function ChangePassword(event) {
   const { value: formValues } = await Swal.fire({
     icon: "info",
     title: "Şifre Değiştir",
+    showCancelButton : true,
+    confirmButtonText : "Şifremi değiştir",
+    cancelButtonText: "İptal",
     html: `
       <h3> Lütfen yeni şifrenizi Giriniz</h3>
       <input type="password" id="p1" class="swal2-input">
