@@ -211,7 +211,6 @@ app.get("/api/product/get-all-operation-types", async (req, res) => {
 app.post("/api/product/add-product", async (req, resp) => {
   let userId = req.session.userId;
   let userCompanyId = req.session.userCompanyId;
-  console.log(userCompanyId);
   if(userCompanyId == null || userCompanyId === -1){
     resp.json({success: false,message:"Herhangi bir şirkete kayıtlı değilsiniz. Kullanıcı profil sayfasından bir şirkete katılabilir ya da şirketinizi kayıt edebilirsiniz"});
     return;
@@ -221,11 +220,9 @@ app.post("/api/product/add-product", async (req, resp) => {
     userId,
     userCompanyId
   );
-  console.log(`AppJS: ${JSON.stringify(result)}`);
   resp.json(JSON.stringify(result));
 });
 app.post("/api/user/join-company-by-company-id", async (req, resp) => {
-  console.log(`Gelen Body: ${JSON.stringify(req.body)}`);
   let invateCode = req.body.inviteCode;
   const userId = req.session.userId;
   var result = await userService.JoinCompanyByInviteCode(invateCode, userId);
@@ -239,16 +236,19 @@ app.post("/api/company/register", async (req, resp) => {
   let companyName = req.body.companyName;
   let userId = req.session.userId;
   var result = await companyService.Register(companyName, userId);
-  console.log(JSON.stringify(result));
   if (result.success === true) {
     req.session.userCompanyId = result.companyId;
     req.session.companyOwnerUserId = result.companyOwnerUserId;
-
-    console.log(JSON.stringify(req.session));
   }
   resp.json(result);
 });
+app.post("/api/user/change-password", async (req, resp)=> {
+let userId = req.session.userId;
+let password = req.body.password;
+var resultArr = await userService.SetNewPassword(userId, password);
+resp.status(200).json(resultArr);
 
+});
 app.get("/api/company/get-invite-code", async (req, resp) => {
   let userId = req.session.userId;
   let companyOwnerUserId = req.session.companyOwnerUserId;

@@ -16,6 +16,18 @@ class UserRepository {
       await this.dbManager.closeDB();
     }
   }
+  async SetNewPassword(userId, newPassword) {
+    try {
+      await this.dbManager.connectDB();
+      let params = { userId: userId, password:newPassword };
+      let query = "UPDATE Users SET Password=@password where UserId=CONVERT(uniqueidentifier,@userId);";
+      return await this.dbManager.queryWithoutResult(query, params);
+    } catch (err) {
+      console.error("Error retrieving user details:", err);
+    } finally {
+      await this.dbManager.closeDB();
+    }
+  }
   async GetUserDetailsByUserIs(userId) {
     try {
       await this.dbManager.connectDB();

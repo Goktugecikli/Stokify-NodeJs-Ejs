@@ -5,6 +5,22 @@ class UserService {
     this.userRepository = new UserRepository();
     this.companyService = new CompanyService();
   }
+  async SetNewPassword(userId, newPassword) {
+    try {
+      var resultArr = await this.userRepository.SetNewPassword(
+        userId,
+        newPassword
+      );
+
+      console.log("Sonuç:"+JSON.stringify(resultArr));
+      if(!resultArr && resultArr.length === 0){
+        return ({success:false, message:"İşlem Başarısız"});
+      }
+      return ({success:true, message:"İşlem Başarılı"});
+    } catch (err) {
+      console.error("Error validating user", err);
+    }
+  }
 
   async validateUser(username, password) {
     try {
@@ -42,7 +58,11 @@ class UserService {
       if (!joinResult || joinResult.length === 0) {
         return { success: false, message: "Error Join Company" };
       }
-      return ({success:true, userCompanyId:companyDetailsResult[0].CompanyId, companyOwnerUserId:companyDetailsResult[0].CompanyOwnerUserId})
+      return {
+        success: true,
+        userCompanyId: companyDetailsResult[0].CompanyId,
+        companyOwnerUserId: companyDetailsResult[0].CompanyOwnerUserId,
+      };
     } catch (err) {}
   }
   async GetUserDetailsByUserIs(userId) {
