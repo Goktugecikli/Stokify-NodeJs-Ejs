@@ -87,16 +87,28 @@ body {
 }
 
 .password-container {
-  position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .password-input {
-  padding-right: 30px;
+  flex-grow: 1;
 }
 
+.change-password,
 .toggle-password {
+  margin-left: 5px; /* Adjust this value for spacing */
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+}
+
+
+/* .toggle-password {
   position: absolute;
   top: 0;
   right: 0;
   cursor: pointer;
-}
+} */
