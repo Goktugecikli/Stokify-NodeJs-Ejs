@@ -1,90 +1,155 @@
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f9f9f9;
-  color: #333;
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap");
+
+:root {
+  --header-height: 3rem;
+  --font-semi: 600;
+
+  --hue-color: 224;
+  --first-color: hsl(var(--hue-color), 89%, 60%);
+  --second-color: hsl(var(--hue-color), 56%, 12%);
+
+  --body-font: "Poppins", sans-serif;
+  --big-font-size: 2rem;
+  --h2-font-size: 1.25rem;
+  --normal-font-size: .938rem;
+  --smaller-font-size: .75rem;
+
+  --mb-2: 1rem;
+  --mb-4: 2rem;
+  --mb-5: 2.5rem;
+  --mb-6: 3rem;
+  --mt-2: 2rem;
+  --z-back: -10;
+  --z-fixed: 100;
 }
 
-.container {
-  max-width: 800px;
-  margin: 20px auto;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-h1 {
-  text-align: center;
-  margin-top: 0;
-}
-
-.info {
-  margin-top: 30px;
-  text-align: center;
-}
-
-.info p {
-  font-size: 20px;
-  line-height: 1.5;
-  margin-bottom: 30px;
-}
-
-.button {
-  display: inline-block;
-  padding: 10px 20px;
-  background-color: #4caf50;
+.home_transition {
+  border-radius: 0.5rem;
+  background-color: var(--first-color);
+  border: 0;
+  height: 2.7rem;
+  width: 3.5rem;
+  font-size: 1.30rem;
   color: white;
-  text-decoration: none;
-  border-radius: 5px;
-  transition: background-color 0.3s;
+  left: 2%;
+  margin-top:5%;
+  position: relative;
 }
 
-.button:hover {
-  background-color: #388e3c;
+.fa-arrow-right {
+  color: white;
+  font-size: 175%;
 }
 
-.features {
-  margin-top: 50px;
+.home_transition:hover {
+  box-shadow: 0px 10px 36px rgba(0, 0, 0, 0.15);
+  background-color: transparent;
+  background-color: var(--first-color);
+}
+
+.home {
   display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - var(--header-height)); /* Full height minus header */
+  flex-direction: row; /* Row direction to place items side by side */
+  gap: 2rem; /* Optional: Adjust the gap between the items */
 }
 
-.feature {
-  flex: 1 1 300px;
-  margin: 10px;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 5px;
+.home__data {
+  align-self: center;
+  margin-bottom: 2rem; 
+}
+
+.home__title {
+  font-size: var(--big-font-size);
+  margin-bottom: 0;
+  position: relative;
+}
+
+.home__title-color {
+  color: var(--first-color);
+}
+
+.home__img {
+  width: 260px;
+  margin-left: 10rem; /* Adjust top margin */
+}
+
+
+.home__blob {
+  fill: var(--first-color);
+}
+
+.home__blob-img {
+  width: 360px;
+}
+
+.bd-grid {
+  max-width: 1024px;
+  display: grid;
+  margin-left: var(--mb-2);
+  margin-right: var(--mb-2);
+}
+
+.titles {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.contact {
+  display: inline-block;
+  background-color: var(--first-color);
+  color: #fff;
+  padding: 0.75rem 2.5rem;
+  font-weight: var(--font-semi);
+  border-radius: 0.5rem;
+  transition: 0.3s;
+  margin-top: 1rem; /* Add space between buttons */
+  display: block; /* Ensure buttons stack vertically */
+  width: fit-content; /* Adjust width based on content */
   text-align: center;
 }
 
-.feature h2 {
-  margin-top: 0;
-  font-size: 24px;
+body {
+  margin: var(--header-height) 0 0 0;
+  font-family: var(--body-font);
+  font-size: var(--normal-font-size);
+  color: var(--second-color);
+  position: relative;
 }
 
-.feature p {
-  font-size: 16px;
-  line-height: 1.5;
-}
-
-.testimonial {
-  margin-top: 50px;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 5px;
+.welcome-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 2.5rem;
   text-align: center;
+  margin-top: 1rem;
+  color: var(--first-color);
 }
 
-.testimonial p {
-  font-style: italic;
-  color: #666;
-}
+/* Add media queries for responsiveness */
+@media screen and (max-width: 768px) {
+  .titles {
+    flex-direction: column; /* Stack buttons vertically on smaller screens */
+    align-items: center; /* Center items horizontally */
+  }
 
-.testimonial-author {
-  font-weight: bold;
-  color: #333;
+  .button {
+    margin-top: 1rem; /* Add space between buttons */
+  }
+
+  .home__data {
+    text-align: center; /* Center align text on smaller screens */
+  }
+
+  .home__title {
+    font-size: 1.5rem; /* Adjust title font size for smaller screens */
+  }
+
+  .home__img {
+    width: 180px; /* Adjust image size for smaller screens */
+    margin-top: 1.5rem; /* Add more top margin */
+  }
 }
